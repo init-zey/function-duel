@@ -94,12 +94,7 @@ var anchor : Vector2:
 			v.y = older_v_x
 		center_position = v * table_size
 	get:
-		var r = center_position / table_size
-		if vertical:
-			var older_r_x = r.x
-			r.x = r.y
-			r.y = older_r_x
-		return r
+		return get_anchor_from_pos(center_position)
 @onready var prev_anchor : Vector2 = anchor
 var tween_anchor : Vector2:
 	set(v):
@@ -159,14 +154,13 @@ func _gui_input(e):
 	if e is InputEventMouseButton:
 		if e.button_index == MOUSE_BUTTON_LEFT:
 			if e.is_pressed():
-				#if input_rect.has_point(e.position):
 				on_lmb_press()
 				if e.is_double_click():
 					on_lmb_double()
 			else:
 				on_lmb_release()
 	elif e is InputEventMouseMotion:
-		on_mouse_move(e.relative)
+		on_mouse_move(get_anchor_from_pos(e.relative))
 
 func on_lmb_press():
 	if pile == null:
@@ -208,10 +202,10 @@ func on_lmb_release():
 		if collide_flag:
 			on_collision()
 
-func on_mouse_move(relative):
+func on_mouse_move(relative_anchor):
 	if dragging:
-		position += relative
-		lerp_angle = -sign(relative.x) * PI/12
+		anchor += relative_anchor
+		lerp_angle = -sign(relative_anchor.x) * PI/2 * abs(relative_anchor.x * 15)
 
 func init():
 	self.color = Color.TRANSPARENT
@@ -317,3 +311,11 @@ func delete_self():
 	queue_free()
 	table.cards.erase(self)
 	table.card_stack.cards.erase(self)
+
+func get_anchor_from_pos(pos):
+	var r = pos / table_size
+	if vertical:
+		var older_r_x = r.x
+		r.x = r.y
+		r.y = older_r_x
+	return r
