@@ -1,0 +1,108 @@
+[gd_scene load_steps=7 format=3 uid="uid://1euwtkqar7ls"]
+
+[ext_resource type="Shader" path="res://shader/table.gdshader" id="1_eh02b"]
+[ext_resource type="Script" path="res://node/table.gd" id="2_wadsh"]
+[ext_resource type="Script" path="res://node/card_stack.gd" id="3_ofx2a"]
+[ext_resource type="Script" path="res://node/player.gd" id="4_5625h"]
+[ext_resource type="FontFile" uid="uid://ctyqrmo4sxri7" path="res://asset/font/ThaleahFat.ttf" id="4_bpl2a"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o8cu4"]
+shader = ExtResource("1_eh02b")
+shader_parameter/mtime = 256.377
+shader_parameter/slash_speed = -20.0
+shader_parameter/slash_color = Color(0.2, 0.2, 0.2, 1)
+shader_parameter/bg_color = Color(0.4, 0.4, 0.4, 1)
+shader_parameter/resolution = Vector2(335.75, 152.5)
+shader_parameter/slash_weight_pixel = 50
+shader_parameter/left_blued_rate = 0.0
+shader_parameter/right_blued_rate = 0.0
+shader_parameter/confirm_modulate = Color(0.2, 0.3, 1, 1)
+
+[node name="Table" type="ColorRect" node_paths=PackedStringArray("even", "odd", "card_stack")]
+material = SubResource("ShaderMaterial_o8cu4")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_wadsh")
+resolution = Vector2(335.75, 152.5)
+even = NodePath("Even")
+odd = NodePath("Odd")
+card_stack = NodePath("CardStack")
+
+[node name="CardStack" type="Control" parent="." node_paths=PackedStringArray("table", "even", "odd")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_ofx2a")
+table = NodePath("..")
+even = NodePath("../Even")
+odd = NodePath("../Odd")
+
+[node name="Even" type="Label" parent="." node_paths=PackedStringArray("table", "opposite_player")]
+modulate = Color(1, 1, 0.7, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_right = 0.25
+offset_left = -100.0
+offset_right = 100.0
+offset_bottom = 200.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("4_bpl2a")
+theme_override_font_sizes/font_size = 64
+text = "even"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("4_5625h")
+table = NodePath("..")
+player_name = "even"
+rect = Rect2(0, 0, 0.5, 1)
+opposite_player = NodePath("../Odd")
+card_color = Color(1, 1, 0.7, 1)
+custom_player_name = "even"
+v_anchor = Vector2(0.5, 0)
+v_bottom_offset = 200.0
+v_right_offset = 100.0
+v_left_offset = -100.0
+h_anchor = Vector2(0.25, 0)
+h_bottom_offset = 200.0
+h_right_offset = 100.0
+h_left_offset = -100.0
+
+[node name="Odd" type="Label" parent="." node_paths=PackedStringArray("table", "opposite_player")]
+modulate = Color(0.7, 0.96, 1, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75
+anchor_right = 0.75
+offset_left = -100.0
+offset_right = 100.0
+offset_bottom = 200.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("4_bpl2a")
+theme_override_font_sizes/font_size = 64
+text = "odd"
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("4_5625h")
+table = NodePath("..")
+player_name = "odd"
+rect = Rect2(0.5, 0, 0.5, 1)
+opposite_player = NodePath("../Even")
+card_color = Color(0.7, 0.96, 1, 1)
+custom_player_name = "odd"
+v_anchor = Vector2(0.5, 1)
+v_top_offset = -200.0
+v_right_offset = 100.0
+v_left_offset = -100.0
+h_anchor = Vector2(0.75, 0)
+h_bottom_offset = 200.0
+h_right_offset = 100.0
+h_left_offset = -100.0
