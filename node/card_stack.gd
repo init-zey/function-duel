@@ -76,6 +76,30 @@ var deck_remain : Dictionary = deck
 				card.tween_center_position = self.position + irate * Vector2(card.real_card_size.x * 5, 0)
 			else:
 				card.tween_center_position = self.position
+@export var ribbon_name : String = "":
+	set(v):
+		ribbon_name = v
+		ribbon_text = ribbon_name + "\nWINS!"
+@export var ribbon_visible_ratio : float = 0:
+	set(v):
+		ribbon_visible_ratio = v
+		ribbon_label.visible_ratio = v
+@export var ribbon_color : Color = Color.WHITE:
+	set(v):
+		ribbon_color = v
+		ribbon_label.modulate = v
+@export var ribbon_text : String = "":
+	set(v):
+		ribbon_text = v
+		if ribbon_label:
+			ribbon_label.text = "[center][font size=150][wave amp=50.0 freq=5.0 connected=1]" + ribbon_text
+@onready var ribbon_label : RichTextLabel = $RibbonLabel
+@export var show_ribbon : bool = false:
+	set(v):
+		if v != show_ribbon:
+			var tweener = create_tween()
+			tweener.tween_property(ribbon_label, "visible_ratio", 1 if v else 0, 1)
+		show_ribbon = v
 
 func assemble(scheme):
 	if not network.multiplayer.is_server():
@@ -91,8 +115,7 @@ func assemble(scheme):
 			await get_tree().create_timer(0.1).timeout
 	assemble_complete.rpc()
 
-func _ready():
-	await get_tree().process_frame
+func start():
 	assemble(START_SCHEME)
 	await assemble_completed
 	await get_tree().create_timer(1).timeout

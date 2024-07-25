@@ -46,7 +46,24 @@ table = NodePath("..")
 even = NodePath("../Even")
 odd = NodePath("../Odd")
 
+[node name="RibbonLabel" type="RichTextLabel" parent="CardStack"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_right = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/normal_font = ExtResource("4_bpl2a")
+bbcode_enabled = true
+text = "[center][wave amp=50.0 freq=5.0 connected=1][font size=100]FUNCTION [font size=150]DUEL"
+fit_content = true
+
 [node name="Even" type="Label" parent="." node_paths=PackedStringArray("table", "opposite_player")]
+visible = false
 modulate = Color(1, 1, 0.7, 1)
 layout_mode = 1
 anchors_preset = -1
@@ -78,6 +95,7 @@ h_right_offset = 100.0
 h_left_offset = -100.0
 
 [node name="Odd" type="Label" parent="." node_paths=PackedStringArray("table", "opposite_player")]
+visible = false
 modulate = Color(0.7, 0.96, 1, 1)
 layout_mode = 1
 anchors_preset = -1

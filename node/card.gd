@@ -341,3 +341,9 @@ func get_anchor_from_pos(pos):
 @rpc
 func sync_anchor(server_anchor):
 	anchor = server_anchor
+
+func dissolve():
+	var tweener = create_tween()
+	tweener.tween_property(self, "dissolve_value", 0, 0.2)
+	await tweener.finished
+	queue_free()

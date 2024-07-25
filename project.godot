@@ -28,6 +28,11 @@ project/assembly_name="Function Duel"
 
 enabled=PackedStringArray("res://addons/ruake/plugin.cfg")
 
+[gui]
+
+theme/custom="res://asset/user_interface/function_duel_theme.tres"
+theme/custom_font="res://asset/font/Uranus_Pixel_11Px.ttf"
+
 [input]
 
 toggle_ruake={

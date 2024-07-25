@@ -1,6 +1,8 @@
 extends ColorRect
 class_name Table
 
+signal game_end
+
 @export var resolution : Vector2:
 	set(value):
 		resolution = value
@@ -34,7 +36,6 @@ class_name Table
 		for card in cards:
 			card.vertical = v
 		material.set_shader_parameter("vertical", v)
-@export var lobby : Control
 
 var piles : Array
 var cards : Array
@@ -57,7 +58,10 @@ func _ready():
 	self.resized.connect(on_resized)
 	material = ShaderMaterial.new()
 	material.shader = preload("res://shader/table.gdshader")
+
+func start():
 	get_viewport().size_changed.emit()
+	card_stack.start()
 
 func _on_viewport_size_changed():
 	var window_size = get_window().size
@@ -164,11 +168,12 @@ func find_winner_card():
 func dissolve_rest():
 	for card in cards:
 		if card != highlight_value_card:
-			var tweener = create_tween()
-			tweener.tween_property(card, "dissolve_value", 0, 0.2)
+			card.dissolve()
 		else:
 			var tweener = create_tween()
 			tweener.tween_property(card, "height", 32, 0.2)
+	await get_tree().create_timer(1).timeout
+	player_win(highlight_value_card.player)
 
 #region debug command
 func clear():
@@ -178,6 +183,19 @@ func clear():
 	card_stack.cards = []
 #endregion
 
-#region multiplayer support
+func player_win(player):
+	card_stack.ribbon_name = player.player_name
+	var tweener = create_tween()
+	card_stack.show_ribbon = true
+	tweener.set_parallel().tween_property(card_stack, "ribbon_color", player.card_color, 0.2)
+	await get_tree().create_timer(3).timeout
+	tweener.set_parallel().tween_property(card_stack, "ribbon_color", Color.WHITE, 0.2)
+	card_stack.show_ribbon = false
+	await get_tree().create_timer(3).timeout
+	game_end.emit()
 
-#endregion
+func on_global_reset():
+	for pile in piles:
+		pile.queue_free()
+	for card in cards:
+		card.dissolve()
