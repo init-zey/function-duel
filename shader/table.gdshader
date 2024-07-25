@@ -8,6 +8,7 @@ uniform int slash_weight_pixel = 50;
 uniform float left_blued_rate = .0;
 uniform float right_blued_rate = .0;
 uniform vec4 confirm_modulate : source_color = vec4(0.2, 0.3, 1., 1.);
+uniform bool vertical = false;
 
 void fragment(){
 	ivec2 pxy = ivec2(floor(UV * resolution));
@@ -17,7 +18,11 @@ void fragment(){
 	}else{
 		COLOR = bg_color;
 	}
-	float modv = smoothstep(-0.05, 0.05, (UV.x-0.5));
+	float position_index = UV.x;
+	if(vertical){
+		position_index = UV.y;
+	}
+	float modv = smoothstep(-0.05, 0.05, (position_index-0.5));
 	float fmodv = modv * right_blued_rate + (1.0-modv) * left_blued_rate;
 	COLOR *= fmodv * confirm_modulate + (1.0-fmodv);
 }

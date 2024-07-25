@@ -161,4 +161,3 @@ func process(bottom):
 	elif function_name == FunctionName.MOD:
 		if bottom is ValueCard:
 			return [RemainderCard.create(table, bottom.value, bottom.player)]
-	

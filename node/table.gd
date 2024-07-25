@@ -15,7 +15,7 @@ class_name Table
 		material.set_shader_parameter("right_blued_rate", v)
 @export var even : Player
 @export var odd : Player
-@export var card_stack : CardStack
+@export var card_stack : Node
 @export var highlight_value_card : ValueCard = null:
 	set(v):
 		if highlight_value_card != v:
@@ -33,6 +33,8 @@ class_name Table
 		odd.vertical = v
 		for card in cards:
 			card.vertical = v
+		material.set_shader_parameter("vertical", v)
+@export var lobby : Control
 
 var piles : Array
 var cards : Array
@@ -40,13 +42,22 @@ var cards : Array
 var shader_time : float = 0
 
 var dragging : bool = false
+var current_player : Player = null:
+	set(v):
+		current_player = v
+		if not v == null:
+			v.current = true
+			v.opposite_player.current = false
+		else:
+			even.current = true
+			odd.current = true
 
 func _ready():
 	get_viewport().size_changed.connect(_on_viewport_size_changed)
-	_on_viewport_size_changed()
+	self.resized.connect(on_resized)
 	material = ShaderMaterial.new()
 	material.shader = preload("res://shader/table.gdshader")
-	self.resized.connect(on_resized)
+	get_viewport().size_changed.emit()
 
 func _on_viewport_size_changed():
 	var window_size = get_window().size
@@ -58,6 +69,7 @@ func _on_viewport_size_changed():
 		size.y = 540
 		size.x = float(window_size.x) / float(window_size.y) * size.y
 	scale = Vector2(window_size) / size
+
 func on_resized():
 	resolution = size/4
 	vertical = size.y > size.x
@@ -86,23 +98,42 @@ func _gui_input(e):
 				dragging = false
 	elif e is InputEventMouseMotion:
 		if dragging:
-			if e.relative.y >= 20:
-				if e.position.x < size.x / 2:
-					even.confirmed = true
+			var asize = size
+			var arelative = e.relative
+			var aposition = e.position
+			if vertical:
+				var t = asize.y
+				asize.y = asize.x
+				asize.x = t
+				t = arelative.y
+				arelative.y = arelative.x
+				arelative.x = t
+				t = aposition.y
+				aposition.y = aposition.x
+				aposition.x = aposition.y
+			if arelative.y >= 20:
+				if aposition.x < asize.x / 2:
+					if network.sender_name == "even":
+						even.confirm.rpc()
 				else:
-					odd.confirmed = true
-			elif e.relative.y <= -20:
-				if e.position.x < size.x / 2:
-					even.confirmed = false
+					if network.sender_name == "odd":
+						odd.confirm.rpc()
+			elif arelative.y <= -20:
+				if aposition.x < asize.x / 2:
+					if network.sender_name == "even":
+						even.disconfirm.rpc()
 				else:
-					odd.confirmed = false
+					if network.sender_name == "odd":
+						odd.disconfirm.rpc()
+
 func _process(delta):
 	shader_time += delta * (1.0-(even_confirm_rate + odd_confirm_rate)*0.5)
 	material.set_shader_parameter("mtime", shader_time)
 
 func global_confirm():
-	even.confirmed = false
-	odd.confirmed = false
+	if network.multiplayer.is_server():
+		even.disconfirm.rpc()
+		odd.disconfirm.rpc()
 	for pile in piles:
 		pile.style = Pile.Style.LOOSE
 		get_tree().create_timer(0.2).timeout.connect(pile.to_process)
@@ -145,27 +176,8 @@ func clear():
 		card.queue_free()
 	self.cards = []
 	card_stack.cards = []
-
-func add_card(card):
-	self.add_child(card)
-	card.on_enter_table()
-	card.center_position = get_global_mouse_position()
-
-func add_value(real, imag, player):
-	add_card(ValueCard.create(self, Complex.new(real, imag), player))
 #endregion
 
 #region multiplayer support
-
-enum GameState{
-	LOCAL_PLAYING,
-	SERVER_PLAYING,
-	CLIENT_PLAYING,
-	PURE_SERVER,
-	MENU,
-}
-
-@export var game_state : GameState = GameState.LOCAL_PLAYING
-@export var server_player_name : Player
 
 #endregion

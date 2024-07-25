@@ -108,6 +108,10 @@ var to_update_face_pattern : Texture2D = null
 		material.set_shader_parameter("dissolve_value", v)
 		if is_equal_approx(dissolve_value, 0):
 			delete_self()
+var anchor_rect : Rect2:
+	get:
+		var size = table.size / 16
+		return Rect2(center_position - size/2, size)
 
 func _ready():
 	init()
@@ -122,6 +126,8 @@ func _process(delta):
 	if to_update_face_pattern:
 		material.set_shader_parameter("face_pattern_texture", to_update_face_pattern)
 		to_update_face_pattern = null
+	if network.multiplayer.is_server() and pile == null:
+		sync_anchor.rpc(anchor)
 
 func _draw():
 	if cos(revolve) > 0:
@@ -147,21 +153,24 @@ func _exit_tree():
 			pile.top = null
 
 func _gui_input(e):
-	if table.game_state == table.GameState.MENU:
-		return
-	if confirmed or cos(revolve) < 0:
-		return
-	if e is InputEventMouseButton:
-		if e.button_index == MOUSE_BUTTON_LEFT:
-			if e.is_pressed():
-				on_lmb_press()
-				if e.is_double_click():
-					on_lmb_double()
-			else:
-				on_lmb_release()
-	elif e is InputEventMouseMotion:
-		on_mouse_move(get_anchor_from_pos(e.relative))
+	if player == null:
+			return
+	if confirmed:
+			return
 
+	if network.sender_name == self.player.player_name:
+		if e is InputEventMouseButton:
+			if e.button_index == MOUSE_BUTTON_LEFT:
+				if e.is_pressed():
+					on_lmb_press.rpc()
+					if e.is_double_click():
+						on_lmb_double.rpc()
+				else:
+					on_lmb_release.rpc()
+		elif e is InputEventMouseMotion:
+			on_mouse_move.rpc(get_anchor_from_pos(e.relative))
+
+@rpc('any_peer', 'call_local')
 func on_lmb_press():
 	if pile == null:
 		dragging = true
@@ -169,10 +178,12 @@ func on_lmb_press():
 	else:
 		pile.switch_tight_loose()
 
+@rpc('any_peer', 'call_local')
 func on_lmb_double():
 	if not pile == null and not pile.hard_compose:
 		pile.dismiss()
 
+@rpc('any_peer', 'call_local')
 func on_lmb_release():
 	dragging = false
 	if pile == null:
@@ -180,7 +191,7 @@ func on_lmb_release():
 		var compose_flag = false
 		var collide_flag = false
 		for card in table.cards:
-			if card.input_rect.intersects(self.input_rect) and card != self:
+			if card.anchor_rect.intersects(self.anchor_rect) and card != self:
 				bottoms.append(card)
 		for bottom in bottoms:
 			if has_recipe(bottom) and not compose_flag:
@@ -202,6 +213,7 @@ func on_lmb_release():
 		if collide_flag:
 			on_collision()
 
+@rpc('any_peer', 'call_local')
 func on_mouse_move(relative_anchor):
 	if dragging:
 		anchor += relative_anchor
@@ -242,10 +254,16 @@ func send_to(new_player, cpos=null):
 	if cpos == null:
 		self.tween_center_position = player.receive_place(self.real_card_size)
 	else:
-		self.tween_center_position = table_size * (player.rect.position + player.rect.size/2) + 2 * cpos * real_card_size
+		var asize = table_size
+		if vertical:
+			var t = asize.y
+			asize.y = asize.x
+			asize.x = t
+		var target = get_anchor_from_pos(asize * (player.rect.position + player.rect.size/2) + 2 * cpos * real_card_size)
+		self.tween_anchor = target
 	await get_tree().create_timer(0.2).timeout
 	self.prev_anchor = anchor
-	self.on_collision()
+	#self.on_collision()
 	self.on_enter_table()
 
 func process(bottom):
@@ -263,8 +281,8 @@ func has_recipe(bottom):
 
 func on_collision(t=0):
 	for card in self.table.cards:
-		if self.input_rect.intersects(card.input_rect) and card != self:
-			var intersection_size = self.input_rect.intersection(card.input_rect).size
+		if self.anchor_rect.intersects(card.anchor_rect) and card != self:
+			var intersection_size = self.anchor_rect.intersection(card.anchor_rect).size
 			var pos_diff = card.position - self.position
 			var sign_vec = Vector2(0, 0)
 			if abs(pos_diff.x) > abs(pos_diff.y):
@@ -319,3 +337,7 @@ func get_anchor_from_pos(pos):
 		r.x = r.y
 		r.y = older_r_x
 	return r
+
+@rpc
+func sync_anchor(server_anchor):
+	anchor = server_anchor

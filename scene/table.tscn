@@ -17,6 +17,7 @@ shader_parameter/slash_weight_pixel = 50
 shader_parameter/left_blued_rate = 0.0
 shader_parameter/right_blued_rate = 0.0
 shader_parameter/confirm_modulate = Color(0.2, 0.3, 1, 1)
+shader_parameter/vertical = false
 
 [node name="Table" type="ColorRect" node_paths=PackedStringArray("even", "odd", "card_stack")]
 material = SubResource("ShaderMaterial_o8cu4")

@@ -1,6 +1,10 @@
 extends Control
 class_name CardStack
 
+signal assemble_completed()
+signal start_deal_completed()
+signal cards_inited()
+
 static func find_proper_size(n:int)->Vector2i:
 	var i:int=floor(sqrt(n))
 	var l:int=pow(i,2)
@@ -39,6 +43,11 @@ var deck : Dictionary = {
 		"d/dx" : 50,
 	}
 }
+var names = {
+	"function" : deck["function"].keys(),
+	"value" : deck["value"].keys(),
+	"modify" : deck["modify"].keys()
+}
 
 const START_SCHEME : Array = [
 	["function", 3],
@@ -57,41 +66,43 @@ const GAME_SCHEME : Array = [
 @export var odd : Player
 var cards : Array
 var deck_remain : Dictionary = deck
-@export var expand : bool
+@export var expand : bool = false:
+	set(v):
+		expand = v
+		for index in range(len(cards)):
+			var card = cards[index]
+			var irate = (float(index) / (len(cards)-1)) - 0.5
+			if v:
+				card.tween_center_position = self.position + irate * Vector2(card.real_card_size.x * 5, 0)
+			else:
+				card.tween_center_position = self.position
 
 func assemble(scheme):
+	if not network.multiplayer.is_server():
+		return#SERVER ONLY
 	for category_and_time in scheme:
 		var category = category_and_time[0]
 		var time = category_and_time[1]
 		for t in range(time*2):
-			var card_name = extract_random_name(category)
-			if card_name == null:
+			var card_name_idx = extract_random_name_idx(category)
+			if card_name_idx == -1:
 				continue
-			var new_card = null
-			if category == "function":
-				new_card = FunctionCard.create(table, card_name, null)
-			elif category == "value":
-				new_card = ValueCard.create(table, card_name, null)
-			elif category == "modify":
-				new_card = ModifyCard.create(table, card_name, null)
-			table.add_child(new_card)
-			new_card.position = position
-			cards.append(new_card)
-			new_card.revolve = PI/2
-			new_card.tween_revolve = PI
+			add_card.rpc(category, card_name_idx)
+			await get_tree().create_timer(0.1).timeout
+	assemble_complete.rpc()
 
 func _ready():
 	await get_tree().process_frame
-	assemble_and_deal_start()
+	assemble(START_SCHEME)
+	await assemble_completed
+	await get_tree().create_timer(1).timeout
+	deal_start()
+	await start_deal_completed
+	await get_tree().create_timer(1).timeout
 	for t in range(1):
 		assemble(GAME_SCHEME)
 
-func _process(delta):
-	for index in range(len(cards)):
-		var card = cards[index]
-		var irate = (float(index) / (len(cards)-1)) - 0.5
-		card.tween_center_position = position + irate * (Vector2(card.real_card_size.x * 5, 0) if expand else Vector2())
-
+@rpc('call_local')
 func deal(cpos=null):
 	for t in range(2):
 		var card = cards[-1]
@@ -100,7 +111,7 @@ func deal(cpos=null):
 		card.send_to(player, cpos)
 		card.tween_revolve = 0
 
-func extract_random_name(category):
+func extract_random_name_idx(category) -> int:
 	var sum = 0
 	var pool = deck_remain[category]
 	for card_name in pool:
@@ -110,12 +121,35 @@ func extract_random_name(category):
 		ri -= pool[card_name]
 		if ri < 0:
 			pool[card_name] -= 1
-			return card_name
+			return names[category].find(card_name)#prevent key not found when RPC
+	return -1
 
-func assemble_and_deal_start():
-	assemble(START_SCHEME)
-	await get_tree().create_timer(0.2).timeout
+func deal_start():
+	if not network.multiplayer.is_server():
+		return
 	var csize = CardStack.find_proper_size(6)
 	for t in range(6):
 		var cpos = Vector2(t % csize.x, t / csize.x) - Vector2(csize - Vector2i(1, 1))*0.5
-		deal(cpos)
+		deal.rpc(cpos)
+		await get_tree().create_timer(0.1).timeout
+	start_deal_completed.emit()
+
+@rpc('call_local')
+func add_card(category, card_name_idx):
+	var new_card = null
+	var card_name = names[category][card_name_idx]
+	if category == "function":
+		new_card = FunctionCard.create(table, card_name, null)
+	elif category == "value":
+		new_card = ValueCard.create(table, card_name, null)
+	elif category == "modify":
+		new_card = ModifyCard.create(table, card_name, null)
+	table.add_child(new_card)
+	cards.append(new_card)
+	new_card.center_position = position
+	new_card.revolve = PI/2
+	new_card.tween_revolve = PI
+
+@rpc('call_local')
+func assemble_complete():
+	assemble_completed.emit()
