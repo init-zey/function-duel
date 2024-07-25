@@ -20,3 +20,7 @@ func create_client(ip, port):
 func terminate_networking():
 	multiplayer.multiplayer_peer = null
 	sender_list = {}
+	sender_name = null
+
+func is_host():
+	return sender_name == "local" or multiplayer.is_server()

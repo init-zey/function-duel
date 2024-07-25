@@ -102,7 +102,7 @@ var deck_remain : Dictionary = deck
 		show_ribbon = v
 
 func assemble(scheme):
-	if not network.multiplayer.is_server():
+	if not network.is_host():
 		return#SERVER ONLY
 	for category_and_time in scheme:
 		var category = category_and_time[0]
@@ -111,9 +111,15 @@ func assemble(scheme):
 			var card_name_idx = extract_random_name_idx(category)
 			if card_name_idx == -1:
 				continue
-			add_card.rpc(category, card_name_idx)
+			if network.multiplayer.multiplayer_peer:
+				add_card.rpc(category, card_name_idx)
+			else:
+				add_card(category, card_name_idx)
 			await get_tree().create_timer(0.1).timeout
-	assemble_complete.rpc()
+	if network.multiplayer.multiplayer_peer:
+		assemble_complete.rpc()
+	else:
+		assemble_complete()
 
 func start():
 	assemble(START_SCHEME)
@@ -148,12 +154,15 @@ func extract_random_name_idx(category) -> int:
 	return -1
 
 func deal_start():
-	if not network.multiplayer.is_server():
+	if not network.is_host():
 		return
 	var csize = CardStack.find_proper_size(6)
 	for t in range(6):
 		var cpos = Vector2(t % csize.x, t / csize.x) - Vector2(csize - Vector2i(1, 1))*0.5
-		deal.rpc(cpos)
+		if network.multiplayer.multiplayer_peer:
+			deal.rpc(cpos)
+		else:
+			deal(cpos)
 		await get_tree().create_timer(0.1).timeout
 	start_deal_completed.emit()
 

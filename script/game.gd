@@ -6,7 +6,7 @@ signal global_reseted()
 @onready var user_console := $UserConsole
 @onready var console_label := $UserConsole/RichTextLabel
 @onready var line_edit := $UserConsole/HBoxContainer/LineEdit
-@onready var main_h_Box := $MainHBox
+@onready var main_h_box := $MainHBox
 @onready var host_v_box := $HostVBox
 @onready var join_v_box := $JoinVBox
 @onready var lobby_panel := $LobbyPanel
@@ -42,11 +42,11 @@ func append(other_sender_name, message):
 	user_console_push("{0}:{1}".format([other_sender_name, message]))
 
 func _on_host_panel_button_pressed():
-	main_h_Box.visible = false
+	main_h_box.visible = false
 	host_v_box.visible = true
 
 func _on_join_panel_button_pressed():
-	main_h_Box.visible = false
+	main_h_box.visible = false
 	join_v_box.visible = true
 
 func _on_host_button_pressed():
@@ -93,7 +93,6 @@ func _peer_disconnected(peer_id):
 
 @rpc("any_peer")
 func register_sender(unique_id):
-	assert(multiplayer.is_server())
 	var other_sender_name = "odd" if network.sender_name == "even" else "even"
 	network.sender_list[unique_id] = other_sender_name
 	update_sender_list.rpc_id(unique_id, network.sender_list)
@@ -174,7 +173,7 @@ func game_start():
 
 func ui_reset():
 	console_avaiable = false
-	main_h_Box.visible = true
+	main_h_box.visible = true
 	host_v_box.visible = false
 	join_v_box.visible = false
 	lobby_panel.visible = false
@@ -217,7 +216,7 @@ func show_lobby():
 
 @rpc('any_peer')
 func ask_update():
-	assert(network.multiplayer.is_server())
+	assert(network.is_host())
 	even_color_changed.rpc(even_color_picker.color)
 	odd_color_changed.rpc(odd_color_picker.color)
 
@@ -225,12 +224,15 @@ func on_game_end():
 	global_reseted.emit()
 
 func on_global_reset():
-	if network.multiplayer.is_server():
+	if network.is_host():
 		restart_button.visible = true
 
 func _on_restart_button_pressed():
-	to_lobby.rpc()
-	restart_button.visible = false
+	if network.sender_name != "local":
+		to_lobby.rpc()
+		restart_button.visible = false
+	else:
+		ui_reset()
 
 @rpc('call_local')
 func to_lobby():
@@ -238,4 +240,8 @@ func to_lobby():
 
 func _on_local_play_panel_button_pressed():
 	network.sender_name = "local"
+	main_h_box.visible = false
+	table.card_stack.show_ribbon = false
+	table.even.visible = true
+	table.odd.visible = true
 	game_start()

@@ -81,7 +81,6 @@ text = "JOIN
 "
 
 [node name="MarginContainer3" type="MarginContainer" parent="MainHBox"]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8

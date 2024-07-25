@@ -126,8 +126,9 @@ func _process(delta):
 	if to_update_face_pattern:
 		material.set_shader_parameter("face_pattern_texture", to_update_face_pattern)
 		to_update_face_pattern = null
-	if network.multiplayer.is_server() and pile == null:
-		sync_anchor.rpc(anchor)
+	if network.is_host() and pile == null:
+		if network.multiplayer.multiplayer_peer:
+			sync_anchor.rpc(anchor)
 
 func _draw():
 	if cos(revolve) > 0:
@@ -158,17 +159,29 @@ func _gui_input(e):
 	if confirmed:
 			return
 
-	if network.sender_name == self.player.player_name:
+	if network.sender_name == self.player.player_name or network.sender_name == "local":
 		if e is InputEventMouseButton:
 			if e.button_index == MOUSE_BUTTON_LEFT:
 				if e.is_pressed():
-					on_lmb_press.rpc()
+					if network.multiplayer.multiplayer_peer:
+						on_lmb_press.rpc()
+					else:
+						on_lmb_press()
 					if e.is_double_click():
-						on_lmb_double.rpc()
+						if network.multiplayer.multiplayer_peer:
+							on_lmb_double.rpc()
+						else:
+							on_lmb_double()
 				else:
-					on_lmb_release.rpc()
+					if network.multiplayer.multiplayer_peer:
+						on_lmb_release.rpc()
+					else:
+						on_lmb_release()
 		elif e is InputEventMouseMotion:
-			on_mouse_move.rpc(get_anchor_from_pos(e.relative))
+			if network.multiplayer.multiplayer_peer:
+				on_mouse_move.rpc(get_anchor_from_pos(e.relative))
+			else:
+				on_mouse_move(get_anchor_from_pos(e.relative))
 
 @rpc('any_peer', 'call_local')
 func on_lmb_press():

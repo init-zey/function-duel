@@ -117,27 +117,43 @@ func _gui_input(e):
 				aposition.x = aposition.y
 			if arelative.y >= 20:
 				if aposition.x < asize.x / 2:
-					if network.sender_name == "even":
-						even.confirm.rpc()
+					if network.sender_name == "even" or network.sender_name == "local":
+						if network.multiplayer.multiplayer_peer:
+							even.confirm.rpc()
+						else:
+							even.confirm()
 				else:
-					if network.sender_name == "odd":
-						odd.confirm.rpc()
+					if network.sender_name == "odd" or network.sender_name == "local":
+						if network.multiplayer.multiplayer_peer:
+							odd.confirm.rpc()
+						else:
+							odd.confirm()
 			elif arelative.y <= -20:
 				if aposition.x < asize.x / 2:
-					if network.sender_name == "even":
-						even.disconfirm.rpc()
+					if network.sender_name == "even" or network.sender_name == "local":
+						if network.multiplayer.multiplayer_peer:
+							even.disconfirm.rpc()
+						else:
+							even.disconfirm()
 				else:
-					if network.sender_name == "odd":
-						odd.disconfirm.rpc()
+					if network.sender_name == "odd" or network.sender_name == "local":
+						if network.multiplayer.multiplayer_peer:
+							odd.disconfirm.rpc()
+						else:
+							odd.disconfirm()
 
 func _process(delta):
 	shader_time += delta * (1.0-(even_confirm_rate + odd_confirm_rate)*0.5)
 	material.set_shader_parameter("mtime", shader_time)
 
 func global_confirm():
-	if network.multiplayer.is_server():
-		even.disconfirm.rpc()
-		odd.disconfirm.rpc()
+	if network.is_host():
+		if network.multiplayer.multiplayer_peer:
+			even.disconfirm.rpc()
+			odd.disconfirm.rpc()
+		else:
+			even.disconfirm()
+			odd.disconfirm()
 	for pile in piles:
 		pile.style = Pile.Style.LOOSE
 		get_tree().create_timer(0.2).timeout.connect(pile.to_process)
