@@ -1,0 +1,300 @@
+[gd_scene load_steps=4 format=3 uid="uid://c5joj7nr7xqwa"]
+
+[ext_resource type="Script" path="res://script/game.gd" id="1_likpo"]
+[ext_resource type="Script" path="res://script/ip_button.gd" id="2_6qx1a"]
+[ext_resource type="PackedScene" uid="uid://1euwtkqar7ls" path="res://scene/table.tscn" id="2_fk7mu"]
+
+[node name="Game" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_likpo")
+
+[node name="Table" parent="." instance=ExtResource("2_fk7mu")]
+layout_mode = 1
+
+[node name="UserConsole" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UserConsole"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UserConsole"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="UserConsole/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SendButton" type="Button" parent="UserConsole/HBoxContainer"]
+layout_mode = 2
+text = "发送"
+
+[node name="MainHBox" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainHBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HostPanelButton" type="Button" parent="MainHBox/MarginContainer"]
+custom_minimum_size = Vector2(100, 80)
+layout_mode = 2
+text = "HOST"
+
+[node name="MarginContainer2" type="MarginContainer" parent="MainHBox"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="JoinPanelButton" type="Button" parent="MainHBox/MarginContainer2"]
+custom_minimum_size = Vector2(100, 80)
+layout_mode = 2
+text = "JOIN
+"
+
+[node name="MarginContainer3" type="MarginContainer" parent="MainHBox"]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="LocalPlayPanelButton" type="Button" parent="MainHBox/MarginContainer3"]
+custom_minimum_size = Vector2(100, 80)
+layout_mode = 2
+text = "PLAY LOCAL"
+
+[node name="HostVBox" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="HostVBox"]
+layout_mode = 2
+text = "HOSTING"
+horizontal_alignment = 1
+
+[node name="IPButton" type="Button" parent="HostVBox"]
+layout_mode = 2
+text = "Your IP: 10.147.17.25(click to copy)"
+script = ExtResource("2_6qx1a")
+
+[node name="LineEdit" type="LineEdit" parent="HostVBox"]
+layout_mode = 2
+placeholder_text = "port:7777"
+expand_to_text_length = true
+
+[node name="SelectionLabel" type="Label" parent="HostVBox"]
+layout_mode = 2
+text = "YOU ARE: (Default even)"
+horizontal_alignment = 1
+
+[node name="CustomNameSelection" type="ItemList" parent="HostVBox"]
+layout_mode = 2
+allow_search = false
+auto_height = true
+item_count = 2
+item_0/text = "even"
+item_1/text = "odd"
+
+[node name="HostButton" type="Button" parent="HostVBox"]
+layout_mode = 2
+text = "CLICK TO HOST"
+
+[node name="HostBackButton" type="Button" parent="HostVBox"]
+layout_mode = 2
+text = "BACK TO MAIN"
+
+[node name="JoinVBox" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TtileLabel" type="Label" parent="JoinVBox"]
+layout_mode = 2
+text = "JOINING"
+horizontal_alignment = 1
+
+[node name="IpLineEdit" type="LineEdit" parent="JoinVBox"]
+layout_mode = 2
+placeholder_text = "Host IP"
+
+[node name="PortLineEdit" type="LineEdit" parent="JoinVBox"]
+layout_mode = 2
+placeholder_text = "Host Port(7777)"
+expand_to_text_length = true
+
+[node name="JoinButton" type="Button" parent="JoinVBox"]
+layout_mode = 2
+text = "CLICK TO JOIN"
+
+[node name="JoinBackButton" type="Button" parent="JoinVBox"]
+layout_mode = 2
+text = "BACK TO MAIN"
+
+[node name="BottomLabel" type="Label" parent="JoinVBox"]
+visible = false
+modulate = Color(1, 0, 0, 1)
+layout_mode = 2
+text = "JOIN FAILED!"
+horizontal_alignment = 1
+
+[node name="LobbyPanel" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="LobbyPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LobbyPanel/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="LobbyPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Lobby"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="LobbyPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Players:"
+horizontal_alignment = 1
+
+[node name="PlayerList" type="PanelContainer" parent="LobbyPanel/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LobbyPanel/MarginContainer/VBoxContainer/PlayerList"]
+layout_mode = 2
+
+[node name="even" type="HBoxContainer" parent="LobbyPanel/MarginContainer/VBoxContainer/PlayerList/VBoxContainer"]
+layout_mode = 2
+
+[node name="EvenColorPickerButton" type="ColorPickerButton" parent="LobbyPanel/MarginContainer/VBoxContainer/PlayerList/VBoxContainer/even"]
+layout_mode = 2
+text = "W.."
+color = Color(1, 1, 0.701961, 1)
+edit_alpha = false
+
+[node name="Label" type="Label" parent="LobbyPanel/MarginContainer/VBoxContainer/PlayerList/VBoxContainer/even"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "even ❌"
+horizontal_alignment = 1
+
+[node name="odd" type="HBoxContainer" parent="LobbyPanel/MarginContainer/VBoxContainer/PlayerList/VBoxContainer"]
+layout_mode = 2
+
+[node name="OddColorPickerButton" type="ColorPickerButton" parent="LobbyPanel/MarginContainer/VBoxContainer/PlayerList/VBoxContainer/odd"]
+layout_mode = 2
+text = "W.."
+color = Color(0.701961, 0.960784, 1, 1)
+edit_alpha = false
+
+[node name="Label" type="Label" parent="LobbyPanel/MarginContainer/VBoxContainer/PlayerList/VBoxContainer/odd"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "odd ❌"
+horizontal_alignment = 1
+
+[node name="StartButton" type="Button" parent="LobbyPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "START!"
+
+[node name="BackButton" type="Button" parent="LobbyPanel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "BACK"
+
+[node name="RestartButton" type="Button" parent="."]
+visible = false
+custom_minimum_size = Vector2(100, 80)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.5
+offset_top = -15.5
+offset_right = 32.5
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Restart"
+
+[connection signal="pressed" from="UserConsole/HBoxContainer/SendButton" to="." method="_on_send_button_pressed"]
+[connection signal="pressed" from="MainHBox/MarginContainer/HostPanelButton" to="." method="_on_host_panel_button_pressed"]
+[connection signal="pressed" from="MainHBox/MarginContainer2/JoinPanelButton" to="." method="_on_join_panel_button_pressed"]
+[connection signal="pressed" from="MainHBox/MarginContainer3/LocalPlayPanelButton" to="." method="_on_local_play_panel_button_pressed"]
+[connection signal="pressed" from="HostVBox/HostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="HostVBox/HostBackButton" to="." method="_on_host_back_button_pressed"]
+[connection signal="pressed" from="JoinVBox/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="pressed" from="JoinVBox/JoinBackButton" to="." method="_on_join_back_button_pressed"]
+[connection signal="color_changed" from="LobbyPanel/MarginContainer/VBoxContainer/PlayerList/VBoxContainer/even/EvenColorPickerButton" to="." method="_on_even_color_picker_button_color_changed"]
+[connection signal="color_changed" from="LobbyPanel/MarginContainer/VBoxContainer/PlayerList/VBoxContainer/odd/OddColorPickerButton" to="." method="_on_odd_color_picker_button_color_changed"]
+[connection signal="pressed" from="LobbyPanel/MarginContainer/VBoxContainer/StartButton" to="." method="_on_lobby_start_button_pressed"]
+[connection signal="pressed" from="LobbyPanel/MarginContainer/VBoxContainer/BackButton" to="." method="_on_lobby_back_button_pressed"]
+[connection signal="pressed" from="RestartButton" to="." method="_on_restart_button_pressed"]

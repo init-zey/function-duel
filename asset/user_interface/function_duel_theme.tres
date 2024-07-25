@@ -1,0 +1,48 @@
+[gd_resource type="Theme" load_steps=12 format=3 uid="uid://86dag4slt2i5"]
+
+[ext_resource type="StyleBox" uid="uid://flygd1xg2u5u" path="res://asset/user_interface/disable_box.tres" id="1_uwnpm"]
+[ext_resource type="StyleBox" uid="uid://c7ifjmtkhrdfp" path="res://asset/user_interface/focus_box.tres" id="2_tsvqo"]
+[ext_resource type="StyleBox" uid="uid://bcxj0ulhf5yih" path="res://asset/user_interface/hover_box.tres" id="3_mbrd1"]
+[ext_resource type="StyleBox" uid="uid://bdds4p0fliirn" path="res://asset/user_interface/normal_box.tres" id="4_jp6ml"]
+[ext_resource type="Texture2D" uid="uid://demtxjglth76f" path="res://asset/user_interface/color_picker.png" id="5_3c4kw"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c8vqc"]
+bg_color = Color(0.22, 0.22, 0.22, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2q630"]
+bg_color = Color(0.2088, 0.41818, 0.87, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_e0mkk"]
+bg_color = Color(0, 0, 0, 0.235294)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vtspu"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gsv0t"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gxq63"]
+
+[resource]
+Button/styles/disabled = ExtResource("1_uwnpm")
+Button/styles/focus = ExtResource("2_tsvqo")
+Button/styles/hover = ExtResource("3_mbrd1")
+Button/styles/normal = ExtResource("4_jp6ml")
+Button/styles/pressed = SubResource("StyleBoxFlat_c8vqc")
+ColorPickerButton/icons/bg = ExtResource("5_3c4kw")
+ItemList/styles/cursor = ExtResource("3_mbrd1")
+ItemList/styles/focus = ExtResource("4_jp6ml")
+ItemList/styles/hovered = ExtResource("4_jp6ml")
+ItemList/styles/panel = ExtResource("4_jp6ml")
+ItemList/styles/selected = SubResource("StyleBoxFlat_2q630")
+ItemList/styles/selected_focus = ExtResource("2_tsvqo")
+LineEdit/colors/selection_color = Color(0.447285, 0.55885, 0.89502, 1)
+LineEdit/constants/caret_width = 4
+LineEdit/styles/focus = ExtResource("2_tsvqo")
+LineEdit/styles/normal = ExtResource("4_jp6ml")
+LineEdit/styles/read_only = ExtResource("1_uwnpm")
+Panel/styles/panel = null
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_e0mkk")
+VScrollBar/styles/grabber = SubResource("StyleBoxFlat_vtspu")
+VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_gsv0t")
+VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_gxq63")
+VScrollBar/styles/scroll = ExtResource("4_jp6ml")
+VScrollBar/styles/scroll_focus = ExtResource("2_tsvqo")
