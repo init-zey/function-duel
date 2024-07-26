@@ -37,8 +37,6 @@ shader_parameter/offset = Vector2(0, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vv3cy"]
 shader = ExtResource("6_spgvu")
-shader_parameter/hshadow_size = 0.0
-shader_parameter/vshadow_size = 10.0
 shader_parameter/shadow_col = Color(0, 0, 0, 0.392157)
 
 [node name="Table" type="ColorRect" node_paths=PackedStringArray("even", "odd", "card_stack", "water_top", "water_bottom", "card_canvas_group")]

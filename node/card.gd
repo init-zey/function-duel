@@ -26,7 +26,7 @@ static func create(table, card_name, player):
 @export_range(-PI, PI) var revolve : float = 0:
 	set(v):
 		revolve = v
-		material.set_shader_parameter("revolve", v)
+		set_shader_parameter("revolve", v)
 		queue_redraw()
 var tween_revolve : float:
 	set(v):
@@ -41,7 +41,7 @@ var tween_revolve : float:
 @export_range(0, 1) var face_sep_line_y_rate : float = 0.8:
 	set(v):
 		face_sep_line_y_rate = v
-		material.set_shader_parameter("face_sep_line_y_rate", v)
+		set_shader_parameter("face_sep_line_y_rate", v)
 		queue_redraw()
 
 var card_size : Vector2:
@@ -52,7 +52,7 @@ var dragging : bool = false
 var angle : float = 0:
 	set(v):
 		angle = v
-		material.set_shader_parameter("angle", v)
+		set_shader_parameter("angle", v)
 		queue_redraw()
 @export var lerp_angle : float = 0
 @export var confirmed : bool = false:
@@ -107,14 +107,15 @@ var to_update_face_pattern : Texture2D = null
 @export var dissolve_value : float = 1:
 	set(v):
 		dissolve_value = v
-		material.set_shader_parameter("dissolve_value", v)
+		set_shader_parameter("dissolve_value", v)
 		if is_equal_approx(dissolve_value, 0):
 			delete_self()
 var anchor_rect : Rect2:
 	get:
 		var size = table.size / 16
 		return Rect2(center_position - size/2, size)
-@export var altitude : float = 30
+@export var altitude : float = 10
+@export var mask : CardMask
 
 func _ready():
 	init()
@@ -127,11 +128,13 @@ func _process(delta):
 	if pile == null and not confirmed:
 		lerp_angle = 0
 	if to_update_face_pattern:
-		material.set_shader_parameter("face_pattern_texture", to_update_face_pattern)
+		set_shader_parameter("face_pattern_texture", to_update_face_pattern)
 		to_update_face_pattern = null
 	if not Engine.is_editor_hint() and network.is_host() and pile == null:
 		if network.multiplayer.multiplayer_peer:
 			sync_anchor.rpc(anchor)
+	if mask:
+		mask.position = position + Vector2(0, altitude)
 
 func _draw():
 	if cos(revolve) > 0:
@@ -244,6 +247,8 @@ func init():
 	self.card_name = self.card_name
 	self.table.cards.append(self)
 	self.on_table_resized()
+	self.mask = CardMask.new()
+	table.card_canvas_group.add_child(self.mask)
 
 func update_face_pattern(face_pattern):
 	if face_pattern == null:
@@ -256,10 +261,11 @@ func withdraw():
 func update_size():
 	var prev_center_pos = center_position
 	size = Vector2(real_card_size.y, real_card_size.y)
+	mask.size = size
 	center_position = prev_center_pos
-	material.set_shader_parameter("resolution", Vector2(card_size.y, card_size.y))
-	material.set_shader_parameter("card_size", card_size)
-	material.set_shader_parameter("round_rate", round_rate)
+	set_shader_parameter("resolution", Vector2(card_size.y, card_size.y))
+	set_shader_parameter("card_size", card_size)
+	set_shader_parameter("round_rate", round_rate)
 
 func on_table_resized():
 	var older_anchor = anchor
@@ -319,26 +325,29 @@ func on_collision(t=0):
 				tween_center_position = center_position - diff_vec
 
 func set_shader_confirm_rate(value):
-	material.set_shader_parameter("confirm_rate", value)
+	set_shader_parameter("confirm_rate", value)
 
 func on_confirm():
 	var tweener = create_tween()
 	tweener.tween_method(set_shader_confirm_rate, 0.0, 1.0, 0.2)
+	tweener.set_parallel().tween_property(self, "altitude", 0, 0.2)
 	if pile == null:
 		tween_center_position = center_position + Vector2(0, 10)
 	elif pile.bottom == self:
 		pile.tween_position = pile.position + Vector2(0, 10)
+	await tweener.finished
 
 func on_disconfirm():
 	var tweener = create_tween()
 	tweener.tween_method(set_shader_confirm_rate, 1.0, 0.0, 0.2)
+	tweener.set_parallel().tween_property(self, "altitude", 10, 0.2)
 	if pile == null:
 		tween_center_position = center_position + Vector2(0, -10)
 	elif pile.bottom == self:
 		pile.tween_position = pile.position + Vector2(0, -10)
 
 func on_enter_table():
-	material.set_shader_parameter("face_bg_col", self.player.card_color)
+	set_shader_parameter("face_bg_col", self.player.card_color)
 	if self is ValueCard:
 		table.on_value_card_entered()
 
@@ -364,3 +373,9 @@ func dissolve():
 	tweener.tween_property(self, "dissolve_value", 0, 0.2)
 	await tweener.finished
 	queue_free()
+
+func set_shader_parameter(pname, value):
+	material.set_shader_parameter(pname, value)
+	if mask and pname in ["resolution", "card_size", "round_rate", "angle", "revolve", "dissolve_value", "burn_size"]:
+		mask.material.set_shader_parameter(pname, value)
+

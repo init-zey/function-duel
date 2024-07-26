@@ -1,6 +1,6 @@
 @tool
 extends ColorRect
-class_name CardShadow
+class_name CardMask
 
 var center_position : Vector2:
 	set(v):
@@ -9,5 +9,6 @@ var center_position : Vector2:
 
 func _ready():
 	material = ShaderMaterial.new()
-	material.shader = preload("res://shader/card_shadow.gdshader")
+	material.shader = preload("res://shader/card_mask.gdshader")
 	color = Color.TRANSPARENT
+	mouse_filter = Control.MOUSE_FILTER_IGNORE

@@ -4,7 +4,7 @@ uniform sampler2D face_pattern_texture : hint_default_transparent;
 
 uniform vec2 resolution = vec2(32, 32);
 uniform vec2 card_size = vec2(16, 32);
-uniform float round_rate = 0.1;
+uniform float round_rate = 0.2;
 uniform float angle = 0;
 uniform float revolve = 0;
 uniform float back_cube_rotation_speed = 1;
