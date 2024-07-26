@@ -4,7 +4,7 @@ signal global_reseted()
 
 @onready var table := $Table
 @onready var user_console := $UserConsole
-@onready var console_label := $UserConsole/RichTextLabel
+@onready var console_label := $UserConsole/ColorRect/MarginContainer/RichTextLabel
 @onready var line_edit := $UserConsole/HBoxContainer/LineEdit
 @onready var main_h_box := $MainHBox
 @onready var host_v_box := $HostVBox
@@ -16,10 +16,10 @@ signal global_reseted()
 @onready var odd_online_label := $LobbyPanel/MarginContainer/VBoxContainer/PlayerList/VBoxContainer/odd/Label
 @onready var lobby_start_button := $LobbyPanel/MarginContainer/VBoxContainer/StartButton
 @onready var restart_button := $RestartButton
+@onready var button_sound : AudioStreamPlayer = $ButtonSound
 var time_string : String:
 	get:
 		return "<"+Time.get_time_string_from_system()+">"
-var console_avaiable : bool = false
 
 func _ready():
 	multiplayer.peer_connected.connect(_peer_connected)
@@ -31,10 +31,10 @@ func _ready():
 
 func _input(event):
 	if event is InputEventKey:
-		if console_avaiable and user_console.visible:
+		if user_console.visible:
 			if Input.is_action_just_released("ui_accept"):
 				send_local_message()
-		if console_avaiable and Input.is_action_just_pressed("toggle_user_console"):
+		if Input.is_action_just_pressed("toggle_user_console"):
 			user_console.visible = !user_console.visible
 
 @rpc("any_peer", "call_local")
@@ -42,14 +42,17 @@ func append(other_sender_name, message):
 	user_console_push("{0}:{1}".format([other_sender_name, message]))
 
 func _on_host_panel_button_pressed():
+	button_sound.play()
 	main_h_box.visible = false
 	host_v_box.visible = true
 
 func _on_join_panel_button_pressed():
+	button_sound.play()
 	main_h_box.visible = false
 	join_v_box.visible = true
 
 func _on_host_button_pressed():
+	button_sound.play()
 	host_v_box.visible = false
 	var port = $HostVBox/LineEdit.text
 	var selection_item_list : ItemList = $HostVBox/CustomNameSelection
@@ -63,7 +66,6 @@ func _on_host_button_pressed():
 		7777 if port == "" else int(port),
 		"even" if custom_name == "" else custom_name
 	)
-	console_avaiable = true
 	user_console_push("服务器已建立！")
 	show_lobby()
 	turn_online(network.sender_name)
@@ -112,9 +114,11 @@ func update_sender_list(new_sender_list):
 	join_complete()
 
 func user_console_push(message):
+	button_sound.play()
 	console_label.text += time_string + message + "\n"
 
 func _on_join_button_pressed():
+	button_sound.play()
 	var ip = $JoinVBox/IpLineEdit.text
 	var port = $JoinVBox/PortLineEdit.text
 	network.terminate_networking()
@@ -131,18 +135,24 @@ func _on_send_button_pressed():
 	send_local_message()
 
 func send_local_message():
-	append.rpc(network.sender_name, line_edit.text)
+	if line_edit.text != "":
+		button_sound.play()
+		if network.multiplayer.multiplayer_peer:
+			append.rpc(network.sender_name, line_edit.text)
+		else:
+			append("LOCAL", line_edit.text)
 	line_edit.text = ""
 
 func _on_join_back_button_pressed():
+	button_sound.play()
 	ui_reset()
 	$JoinVBox/BottomLabel.visible = false
 
 func _on_host_back_button_pressed():
+	button_sound.play()
 	ui_reset()
 
 func join_complete():
-	console_avaiable = true
 	show_lobby()
 	turn_online(network.sender_name)
 
@@ -160,9 +170,11 @@ func turn_offline(sender_name):
 
 
 func _on_lobby_start_button_pressed():
+	button_sound.play()
 	game_start.rpc()
 
 func _on_lobby_back_button_pressed():
+	button_sound.play()
 	ui_reset()
 
 @rpc('call_local')
@@ -172,7 +184,6 @@ func game_start():
 	table.start()
 
 func ui_reset():
-	console_avaiable = false
 	main_h_box.visible = true
 	host_v_box.visible = false
 	join_v_box.visible = false
@@ -228,6 +239,7 @@ func on_global_reset():
 		restart_button.visible = true
 
 func _on_restart_button_pressed():
+	button_sound.play()
 	if network.sender_name != "local":
 		to_lobby.rpc()
 		restart_button.visible = false
@@ -239,9 +251,15 @@ func to_lobby():
 	lobby_panel.visible = true
 
 func _on_local_play_panel_button_pressed():
+	button_sound.play()
 	network.sender_name = "local"
 	main_h_box.visible = false
 	table.card_stack.show_ribbon = false
 	table.even.visible = true
 	table.odd.visible = true
 	game_start()
+
+
+func _on_console_button_pressed():
+	button_sound.play()
+	user_console.visible = !user_console.visible

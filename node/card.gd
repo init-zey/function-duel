@@ -20,7 +20,9 @@ static func create(table, card_name, player):
 		
 @export var height : float = 32
 @export_range(0, 1) var aspect : float = 0.53
-@export_range(0, 1) var round_rate : float = 0.2
+@export_range(0, 1) var round_rate : float = 0.2:
+	set(v):
+		round_rate = v
 @export_range(-PI, PI) var revolve : float = 0:
 	set(v):
 		revolve = v
@@ -112,6 +114,7 @@ var anchor_rect : Rect2:
 	get:
 		var size = table.size / 16
 		return Rect2(center_position - size/2, size)
+@export var altitude : float = 30
 
 func _ready():
 	init()
@@ -126,7 +129,7 @@ func _process(delta):
 	if to_update_face_pattern:
 		material.set_shader_parameter("face_pattern_texture", to_update_face_pattern)
 		to_update_face_pattern = null
-	if network.is_host() and pile == null:
+	if not Engine.is_editor_hint() and network.is_host() and pile == null:
 		if network.multiplayer.multiplayer_peer:
 			sync_anchor.rpc(anchor)
 
@@ -138,13 +141,12 @@ func _draw():
 			Vector2(real_card_size.x, real_card_size.y * (1 - face_sep_line_y_rate))
 		).grow(-round_radius)
 		var font_size = 16
-		var string_size = Util.math_font.get_string_size(card_name, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
+		var string_size = util.math_font.get_string_size(card_name, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
 		var string_scale = min(text_space.size.x / string_size.x, text_space.size.y / string_size.y)
 		var margin = (text_space.size - string_size * string_scale) / 2
 		margin.y *= -1
 		draw_set_transform(self.size/2, -angle, Vector2(cos(revolve), 1) * string_scale)
-		draw_string(Util.math_font, (text_space.position + Vector2(0, text_space.size.y) + margin - self.size/2) / string_scale, card_name, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0, 0, 0, dissolve_value))
-
+		draw_string(util.math_font, (text_space.position + Vector2(0, text_space.size.y) + margin - self.size/2) / string_scale, card_name, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0, 0, 0, dissolve_value))
 func _exit_tree():
 	table.cards.erase(self)
 	if not pile == null:
@@ -163,6 +165,7 @@ func _gui_input(e):
 		if e is InputEventMouseButton:
 			if e.button_index == MOUSE_BUTTON_LEFT:
 				if e.is_pressed():
+					util.play_sound(preload("res://asset/sound/card_pick.mp3"))
 					if network.multiplayer.multiplayer_peer:
 						on_lmb_press.rpc()
 					else:
@@ -173,6 +176,7 @@ func _gui_input(e):
 						else:
 							on_lmb_double()
 				else:
+					util.play_sound(preload("res://asset/sound/card_release.mp3"))
 					if network.multiplayer.multiplayer_peer:
 						on_lmb_release.rpc()
 					else:

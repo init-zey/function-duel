@@ -120,17 +120,6 @@ void fragment(){
 			COLOR = COLOR * (1.0-local_confirm_rate) + confirm_col * local_confirm_rate;
 			float local_maxhighlight_rate = edge_test(pxy, maxhighlight_rate);
 			COLOR = COLOR * (1.0-local_maxhighlight_rate) + maxhighlight_col * local_maxhighlight_rate;
-			
-			float noise = perlin(pxy);
-			
-			// This is needed to avoid keeping a small burn_color dot with dissolve being 0 or 1
-			// is there another way to do it?
-			float burn_size_step = burn_size * step(0.001, dissolve_value) * step(dissolve_value, 0.999);
-			float threshold = smoothstep(noise-burn_size_step, noise, dissolve_value);
-			float border = smoothstep(noise, noise + burn_size_step, dissolve_value);
-			
-			COLOR.a *= threshold;
-			COLOR.rgb = mix(burn_color.rgb, COLOR.rgb, border);
 		}
 	}else{
 		pxy.x *= -1.0;
@@ -141,4 +130,10 @@ void fragment(){
 			}
 		}
 	}
+	float noise = perlin(pxy);
+	float burn_size_step = burn_size * step(0.001, dissolve_value) * step(dissolve_value, 0.999);
+	float threshold = smoothstep(noise-burn_size_step, noise, dissolve_value);
+	float border = smoothstep(noise, noise + burn_size_step, dissolve_value);
+	COLOR.a *= threshold;
+	COLOR.rgb = mix(burn_color.rgb, COLOR.rgb, border);
 }

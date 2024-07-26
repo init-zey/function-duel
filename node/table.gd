@@ -4,17 +4,19 @@ class_name Table
 signal game_end
 
 @export var resolution : Vector2:
-	set(value):
-		resolution = value
-		material.set_shader_parameter("resolution", value)
+	set(v):
+		resolution = v
+		if water_top and water_bottom:
+			water_top.material.set_shader_parameter("resolution", v)
+			water_bottom.material.set_shader_parameter("right_blued_rate", v)
 @export var even_confirm_rate : float:
 	set(v):
 		even_confirm_rate = v
-		material.set_shader_parameter("left_blued_rate", v)
+		water_top.material.set_shader_parameter("left_blued_rate", v)
 @export var odd_confirm_rate : float:
 	set(v):
 		odd_confirm_rate = v
-		material.set_shader_parameter("right_blued_rate", v)
+		water_top.material.set_shader_parameter("right_blued_rate", v)
 @export var even : Player
 @export var odd : Player
 @export var card_stack : Node
@@ -35,7 +37,10 @@ signal game_end
 		odd.vertical = v
 		for card in cards:
 			card.vertical = v
-		material.set_shader_parameter("vertical", v)
+		water_top.material.set_shader_parameter("vertical", v)
+		water_bottom.material.set_shader_parameter("vertical", v)
+@export var water_top : ColorRect
+@export var water_bottom : ColorRect
 
 var piles : Array
 var cards : Array
@@ -53,11 +58,11 @@ var current_player : Player = null:
 			even.current = true
 			odd.current = true
 
+@export var card_canvas_group : CanvasGroup
+
 func _ready():
 	get_viewport().size_changed.connect(_on_viewport_size_changed)
 	self.resized.connect(on_resized)
-	material = ShaderMaterial.new()
-	material.shader = preload("res://shader/table.gdshader")
 
 func start():
 	get_viewport().size_changed.emit()
@@ -114,7 +119,7 @@ func _gui_input(e):
 				arelative.x = t
 				t = aposition.y
 				aposition.y = aposition.x
-				aposition.x = aposition.y
+				aposition.x = t
 			if arelative.y >= 20:
 				if aposition.x < asize.x / 2:
 					if network.sender_name == "even" or network.sender_name == "local":
@@ -144,7 +149,8 @@ func _gui_input(e):
 
 func _process(delta):
 	shader_time += delta * (1.0-(even_confirm_rate + odd_confirm_rate)*0.5)
-	material.set_shader_parameter("mtime", shader_time)
+	water_top.material.set_shader_parameter("mtime", shader_time)
+	water_bottom.material.set_shader_parameter("mtime", shader_time)
 
 func global_confirm():
 	if network.is_host():

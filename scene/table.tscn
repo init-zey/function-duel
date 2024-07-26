@@ -1,36 +1,81 @@
-[gd_scene load_steps=7 format=3 uid="uid://1euwtkqar7ls"]
+[gd_scene load_steps=11 format=3 uid="uid://1euwtkqar7ls"]
 
-[ext_resource type="Shader" path="res://shader/table.gdshader" id="1_eh02b"]
+[ext_resource type="Shader" path="res://shader/water_top.gdshader" id="1_e538w"]
+[ext_resource type="Shader" path="res://shader/water_bottom.gdshader" id="2_lwbyn"]
 [ext_resource type="Script" path="res://node/table.gd" id="2_wadsh"]
 [ext_resource type="Script" path="res://node/card_stack.gd" id="3_ofx2a"]
 [ext_resource type="Script" path="res://node/player.gd" id="4_5625h"]
 [ext_resource type="FontFile" uid="uid://ctyqrmo4sxri7" path="res://asset/font/ThaleahFat.ttf" id="4_bpl2a"]
+[ext_resource type="Shader" path="res://shader/card_group.gdshader" id="6_spgvu"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_o8cu4"]
-shader = ExtResource("1_eh02b")
-shader_parameter/mtime = 256.377
-shader_parameter/slash_speed = -20.0
-shader_parameter/slash_color = Color(0.2, 0.2, 0.2, 1)
-shader_parameter/bg_color = Color(0.4, 0.4, 0.4, 1)
-shader_parameter/resolution = Vector2(335.75, 152.5)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gbr18"]
+shader = ExtResource("2_lwbyn")
+shader_parameter/mtime = 0.0
+shader_parameter/resolution = Vector2(288, 162)
+shader_parameter/WATER_COL = Color(0.176471, 0.635294, 0.85098, 1)
+shader_parameter/WATER2_COL = Color(0.0588235, 0.529412, 0.776471, 1)
+shader_parameter/FOAM_COL = Color(0.87451, 0.988235, 1, 1)
+shader_parameter/distortion_vector = Vector2(0, -2)
+shader_parameter/tile = Vector2(10, 10)
+shader_parameter/offset = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yuh68"]
+shader = ExtResource("1_e538w")
+shader_parameter/mtime = 0.0
+shader_parameter/resolution = Vector2(288, 162)
 shader_parameter/slash_weight_pixel = 50
 shader_parameter/left_blued_rate = 0.0
 shader_parameter/right_blued_rate = 0.0
-shader_parameter/confirm_modulate = Color(0.2, 0.3, 1, 1)
+shader_parameter/confirm_modulate = Color(0.192157, 0.286275, 1, 0)
 shader_parameter/vertical = false
+shader_parameter/WATER_COL = Color(0.176471, 0.635294, 0.85098, 1)
+shader_parameter/WATER2_COL = Color(0.0588235, 0.529412, 0.776471, 1)
+shader_parameter/FOAM_COL = Color(0.87451, 0.988235, 1, 1)
+shader_parameter/distortion_vector = Vector2(0, -2)
+shader_parameter/tile = Vector2(10, 10)
+shader_parameter/offset = Vector2(0, 0)
 
-[node name="Table" type="ColorRect" node_paths=PackedStringArray("even", "odd", "card_stack")]
-material = SubResource("ShaderMaterial_o8cu4")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_vv3cy"]
+shader = ExtResource("6_spgvu")
+shader_parameter/hshadow_size = 0.0
+shader_parameter/vshadow_size = 10.0
+shader_parameter/shadow_col = Color(0, 0, 0, 0.392157)
+
+[node name="Table" type="ColorRect" node_paths=PackedStringArray("even", "odd", "card_stack", "water_top", "water_bottom", "card_canvas_group")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(1, 1, 1, 0)
 script = ExtResource("2_wadsh")
 resolution = Vector2(335.75, 152.5)
 even = NodePath("Even")
 odd = NodePath("Odd")
 card_stack = NodePath("CardStack")
+water_top = NodePath("WaterTop")
+water_bottom = NodePath("WaterBottom")
+card_canvas_group = NodePath("CardCanvasGroup")
+
+[node name="WaterBottom" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_gbr18")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="WaterTop" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_yuh68")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="CardStack" type="Control" parent="." node_paths=PackedStringArray("table", "even", "odd")]
 layout_mode = 1
@@ -63,7 +108,6 @@ text = "[center][wave amp=50.0 freq=5.0 connected=1][font size=100]FUNCTION [fon
 fit_content = true
 
 [node name="Even" type="Label" parent="." node_paths=PackedStringArray("table", "opposite_player")]
-visible = false
 modulate = Color(1, 1, 0.7, 1)
 layout_mode = 1
 anchors_preset = -1
@@ -95,7 +139,6 @@ h_right_offset = 100.0
 h_left_offset = -100.0
 
 [node name="Odd" type="Label" parent="." node_paths=PackedStringArray("table", "opposite_player")]
-visible = false
 modulate = Color(0.7, 0.96, 1, 1)
 layout_mode = 1
 anchors_preset = -1
@@ -125,3 +168,7 @@ h_anchor = Vector2(0.75, 0)
 h_bottom_offset = 200.0
 h_right_offset = 100.0
 h_left_offset = -100.0
+
+[node name="CardCanvasGroup" type="CanvasGroup" parent="."]
+material = SubResource("ShaderMaterial_vv3cy")
+use_parent_material = true
