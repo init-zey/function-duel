@@ -191,7 +191,7 @@ func ui_reset():
 	lobby_start_button.disabled = true
 	even_color_picker.disabled = true
 	odd_color_picker.disabled = true
-	table.card_stack.ribbon_label.text = "[center][wave amp=50.0 freq=5.0 connected=1][font size=100]FUNCTION [font size=150]DUEL"
+	table.card_stack.ribbon_label.text = "[center][wave amp=50.0 freq=5.0 connected=1][font size=100]FUNCTION [font size=150](DUEL)"
 	table.card_stack.ribbon_color = Color.WHITE
 	table.card_stack.show_ribbon = true
 	table.even.visible = false

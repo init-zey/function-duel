@@ -10,9 +10,14 @@ config_version=5
 
 [application]
 
-config/name="Function Duel"
+config/name="Function(Duel)"
+config/name_localized={
+"zh_CN": "函数决斗"
+}
+config/version="v1.0.0"
 run/main_scene="res://scene/game.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
+boot_splash/show_image=false
 config/icon="res://icon.svg"
 
 [autoload]
@@ -20,6 +25,10 @@ config/icon="res://icon.svg"
 RuakeLayer="*res://addons/ruake/core/RuakeLayer.tscn"
 network="*res://script/network.gd"
 util="*res://script/util.gd"
+
+[display]
+
+window/handheld/orientation=6
 
 [dotnet]
 
