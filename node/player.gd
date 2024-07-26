@@ -47,6 +47,7 @@ func _ready():
 	add_theme_font_size_override("font_size", 64)
 	add_theme_font_override("font", preload("res://asset/font/ThaleahFat.ttf"))
 	custom_player_name = player_name
+	self.vertical = table.vertical
 
 @rpc('call_local', 'any_peer')
 func confirm():

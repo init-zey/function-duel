@@ -87,7 +87,6 @@ func to_process():
 	self.bottom.revolve = PI/2
 	self.top.revolve = -PI/2
 	await get_tree().create_timer(0.2).timeout
-	queue_free()
 	var process_result = top.process(bottom)
 	for index in range(len(process_result)):
 		var card = process_result[index]
@@ -97,3 +96,5 @@ func to_process():
 		card.revolve = PI/2
 		card.tween_revolve = 0
 		get_tree().create_timer(0.2).timeout.connect(card.on_enter_table)
+		await get_tree().create_timer(0.1).timeout
+	queue_free()

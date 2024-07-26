@@ -246,6 +246,7 @@ func init():
 	self.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	self.card_name = self.card_name
 	self.table.cards.append(self)
+	self.vertical = table.vertical
 	self.on_table_resized()
 	self.mask = CardMask.new()
 	table.card_canvas_group.add_child(self.mask)
@@ -277,13 +278,20 @@ func send_to(new_player, cpos=null):
 	if cpos == null:
 		self.tween_center_position = player.receive_place(self.real_card_size)
 	else:
-		var asize = table_size
+		var asize = table.size
 		if vertical:
 			var t = asize.y
 			asize.y = asize.x
 			asize.x = t
-		var target = get_anchor_from_pos(asize * (player.rect.position + player.rect.size/2) + 2 * cpos * real_card_size)
-		self.tween_anchor = target
+		var target = asize * (player.rect.position + player.rect.size/2) + 2 * cpos * real_card_size
+		if vertical:
+			var t = target.y
+			target.y = target.x
+			target.x = t
+			t = cpos.y
+			cpos.y = cpos.x
+			cpos.x = t
+		self.tween_center_position = target
 	await get_tree().create_timer(0.2).timeout
 	self.prev_anchor = anchor
 	#self.on_collision()

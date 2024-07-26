@@ -100,6 +100,7 @@ var deck_remain : Dictionary = deck
 			var tweener = create_tween()
 			tweener.tween_property(ribbon_label, "visible_ratio", 1 if v else 0, 1)
 		show_ribbon = v
+var start_complete : bool
 
 func assemble(scheme):
 	if not network.is_host():
@@ -130,6 +131,8 @@ func start():
 	await get_tree().create_timer(1).timeout
 	for t in range(1):
 		assemble(GAME_SCHEME)
+	await assemble_completed
+	start_complete = true
 
 @rpc('call_local')
 func deal(cpos=null):
@@ -166,7 +169,7 @@ func deal_start():
 			deal(cpos)
 		await get_tree().create_timer(0.1).timeout
 	start_deal_completed.emit()
-
+	
 @rpc('call_local')
 func add_card(category, card_name_idx):
 	util.play_sound(preload("res://asset/sound/card_appear.mp3"), 0, 2, -15-card_name_idx)

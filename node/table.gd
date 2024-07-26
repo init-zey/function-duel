@@ -67,9 +67,10 @@ var current_player : Player = null:
 func _ready():
 	get_viewport().size_changed.connect(_on_viewport_size_changed)
 	self.resized.connect(on_resized)
+	_on_viewport_size_changed()
+	on_resized()
 
 func start():
-	get_viewport().size_changed.emit()
 	card_stack.start()
 
 func _on_viewport_size_changed():
@@ -110,7 +111,7 @@ func _gui_input(e):
 			else:
 				dragging = false
 	elif e is InputEventMouseMotion:
-		if dragging:
+		if dragging and card_stack.start_complete:
 			var asize = size
 			var arelative = e.relative
 			var aposition = e.position
@@ -228,3 +229,4 @@ func on_global_reset():
 		pile.queue_free()
 	for card in cards:
 		card.dissolve()
+	card_stack.start_deal_complete = false
