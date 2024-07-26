@@ -170,6 +170,7 @@ func global_confirm():
 	if len(card_stack.cards) >= 2:
 		card_stack.deal()
 	else:
+		card_stack.start_complete = false
 		await get_tree().create_timer(1).timeout
 		dissolve_rest()
 
@@ -229,4 +230,3 @@ func on_global_reset():
 		pile.queue_free()
 	for card in cards:
 		card.dissolve()
-	card_stack.start_deal_complete = false
