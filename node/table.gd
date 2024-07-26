@@ -114,9 +114,6 @@ func _gui_input(e):
 				var t = asize.y
 				asize.y = asize.x
 				asize.x = t
-				t = arelative.y
-				arelative.y = arelative.x
-				arelative.x = t
 				t = aposition.y
 				aposition.y = aposition.x
 				aposition.x = t
@@ -151,6 +148,7 @@ func _process(delta):
 	shader_time += delta * (1.0-(even_confirm_rate + odd_confirm_rate)*0.5)
 	water_top.material.set_shader_parameter("mtime", shader_time)
 	water_bottom.material.set_shader_parameter("mtime", shader_time)
+	card_canvas_group.material.set_shader_parameter("mtime", shader_time)
 
 func global_confirm():
 	if network.is_host():

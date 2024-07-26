@@ -12,11 +12,13 @@
 shader = ExtResource("2_lwbyn")
 shader_parameter/mtime = 0.0
 shader_parameter/resolution = Vector2(288, 162)
-shader_parameter/WATER_COL = Color(0.176471, 0.635294, 0.85098, 1)
-shader_parameter/WATER2_COL = Color(0.0588235, 0.529412, 0.776471, 1)
+shader_parameter/WATER_COL = Color(0.1445, 0.767692, 0.85, 1)
+shader_parameter/WATER2_COL = Color(0.0624, 0.64844, 0.78, 1)
+shader_parameter/WATER3_COL = Color(0.0980392, 0.686275, 0.654902, 1)
+shader_parameter/WATER4_COL = Color(0.12549, 0.603922, 0.529412, 1)
 shader_parameter/FOAM_COL = Color(0.87451, 0.988235, 1, 1)
-shader_parameter/distortion_vector = Vector2(0, -2)
-shader_parameter/tile = Vector2(10, 10)
+shader_parameter/distortion_speed = -2.0
+shader_parameter/tile = Vector2(5, 5)
 shader_parameter/offset = Vector2(0, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yuh68"]
@@ -31,13 +33,14 @@ shader_parameter/vertical = false
 shader_parameter/WATER_COL = Color(0.176471, 0.635294, 0.85098, 1)
 shader_parameter/WATER2_COL = Color(0.0588235, 0.529412, 0.776471, 1)
 shader_parameter/FOAM_COL = Color(0.87451, 0.988235, 1, 1)
-shader_parameter/distortion_vector = Vector2(0, -2)
-shader_parameter/tile = Vector2(10, 10)
+shader_parameter/distortion_speed = -2.0
+shader_parameter/tile = Vector2(5, 5)
 shader_parameter/offset = Vector2(0, 0)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vv3cy"]
 shader = ExtResource("6_spgvu")
 shader_parameter/shadow_col = Color(0, 0, 0, 0.392157)
+shader_parameter/mtime = null
 
 [node name="Table" type="ColorRect" node_paths=PackedStringArray("even", "odd", "card_stack", "water_top", "water_bottom", "card_canvas_group")]
 anchors_preset = 15
@@ -170,3 +173,5 @@ h_left_offset = -100.0
 [node name="CardCanvasGroup" type="CanvasGroup" parent="."]
 material = SubResource("ShaderMaterial_vv3cy")
 use_parent_material = true
+fit_margin = 200.0
+clear_margin = 200.0

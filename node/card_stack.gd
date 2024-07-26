@@ -139,6 +139,7 @@ func deal(cpos=null):
 		cards.resize(len(cards) - 1)
 		card.send_to(player, cpos)
 		card.tween_revolve = 0
+	util.play_sound(preload("res://asset/sound/deal.mp3"))
 
 func extract_random_name_idx(category) -> int:
 	var sum = 0

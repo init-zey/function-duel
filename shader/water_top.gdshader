@@ -19,7 +19,7 @@ uniform vec4 WATER_COL : source_color =  vec4(0.176471, 0.635294, 0.85098, 1.0);
 uniform vec4 WATER2_COL : source_color =  vec4(0.0588235, 0.529412, 0.776471, 1.0);
 uniform vec4 FOAM_COL : source_color = vec4(0.87451, 0.988235, 1, 1.0);
 
-uniform vec2 distortion_vector = vec2(0, -2.0);
+uniform float distortion_speed = -2.0;
 uniform vec2 tile = vec2(10, 10);
 uniform vec2 offset = vec2(0, 0);
 
@@ -31,10 +31,8 @@ float circ(vec2 pos, vec2 c, float s)
 {
     c = abs(pos - c);
     c = min(c, 1.0 - c);
-
     return smoothstep(0.0, 0.002, sqrt(s) - sqrt(dot(c, c))) * -1.0;
 }
-
 
 float waterlayer(vec2 uv)
 {
@@ -118,40 +116,31 @@ float waterlayer(vec2 uv)
 	return max(ret, 0.0);
 }
 
-vec4 water(vec2 uv, vec3 cdir, vec2 dist){
-	float uv_index = uv.y;
-    uv *= vec2(0.25);
-    float d1 = mod(uv_index, TWOPI);
-    float d2 = mod((uv_index + 0.25) * 1.3, SIXPI);
-    d1 = dist.y * 0.07 + d1;
-    d2 = dist.y * 0.5 + d2;
-    vec2 water_dist = vec2(
+vec2 dist(float index, float dist_power){
+	float d1 = mod(index, TWOPI);
+    float d2 = mod((index + 0.25) * 1.3, SIXPI);
+    d1 = dist_power * 0.07 + d1;
+    d2 = dist_power * 0.5 + d2;
+    return vec2(
     	sin(d1) * 0.15 + cos(d2) * 0.05,
     	cos(d1) * 0.15 + cos(d2) * 0.05
     );
+}
+
+vec4 water(vec2 uv, vec3 cdir, float dist_power){
+	float uv_index = uv.y * 2.0;
+    uv *= vec2(0.5);
+    vec2 water_dist = dist(uv_index, dist_power);
     vec4 ret = mix(vec4(0.0), FOAM_COL, waterlayer(vec2(1.0) - uv - water_dist.yx));
     return ret;
-}
-
-varying vec2 globalposition;
-void vertex(){
-	globalposition = (MODEL_MATRIX * vec4(VERTEX, 0.0, 1.0)).xy;
-}
-
-vec2 polar_coordinates(vec2 uv, vec2 center, float zoom, float repeat)
-{
-	vec2 dir = uv - center;
-	highp float radius = length(dir) * 2.0;
-	highp float angle = atan(dir.y, dir.x) / TAU;
-	return mod(vec2(radius * zoom, angle * repeat), 1.0);
 }
 
 void fragment(){
 	ivec2 pxy = ivec2(floor(UV * resolution));
 	vec2 fpxy = vec2(pxy);
 	fpxy.y += mtime * 10.0;
-	vec2 uv = globalposition / 32.0;
-	COLOR = water(fpxy * tile / resolution + offset, vec3(0,1,0), TIME * distortion_vector);
+	vec2 uv = SCREEN_UV / 32.0;
+	COLOR = water(fpxy * tile / resolution + offset, vec3(0,1,0), TIME * distortion_speed);
 	float position_index = UV.x;
 	if(vertical){
 		position_index = UV.y;
