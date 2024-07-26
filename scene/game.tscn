@@ -63,7 +63,7 @@ theme_override_constants/margin_bottom = 8
 [node name="HostPanelButton" type="Button" parent="MainHBox/MarginContainer"]
 custom_minimum_size = Vector2(100, 80)
 layout_mode = 2
-text = "HOST"
+text = "创建房间"
 
 [node name="MarginContainer2" type="MarginContainer" parent="MainHBox"]
 layout_mode = 2
@@ -75,8 +75,7 @@ theme_override_constants/margin_bottom = 8
 [node name="JoinPanelButton" type="Button" parent="MainHBox/MarginContainer2"]
 custom_minimum_size = Vector2(100, 80)
 layout_mode = 2
-text = "JOIN
-"
+text = "加入房间"
 
 [node name="MarginContainer3" type="MarginContainer" parent="MainHBox"]
 layout_mode = 2
@@ -88,7 +87,7 @@ theme_override_constants/margin_bottom = 8
 [node name="LocalPlayPanelButton" type="Button" parent="MainHBox/MarginContainer3"]
 custom_minimum_size = Vector2(100, 80)
 layout_mode = 2
-text = "PLAY LOCAL"
+text = "本地游玩"
 
 [node name="HostVBox" type="VBoxContainer" parent="."]
 visible = false
@@ -107,22 +106,22 @@ grow_vertical = 2
 
 [node name="TitleLabel" type="Label" parent="HostVBox"]
 layout_mode = 2
-text = "HOSTING"
+text = "创建房间"
 horizontal_alignment = 1
 
 [node name="IPButton" type="Button" parent="HostVBox"]
 layout_mode = 2
-text = "Your IP: 10.147.17.25(click to copy)"
+text = "你的IP: 10.147.17.25(右键复制)"
 script = ExtResource("2_6qx1a")
 
 [node name="LineEdit" type="LineEdit" parent="HostVBox"]
 layout_mode = 2
-placeholder_text = "port:7777"
+placeholder_text = "端口:7777"
 expand_to_text_length = true
 
 [node name="SelectionLabel" type="Label" parent="HostVBox"]
 layout_mode = 2
-text = "YOU ARE: (Default even)"
+text = "你是：（默认为偶数方）"
 horizontal_alignment = 1
 
 [node name="CustomNameSelection" type="ItemList" parent="HostVBox"]
@@ -130,16 +129,16 @@ layout_mode = 2
 allow_search = false
 auto_height = true
 item_count = 2
-item_0/text = "even"
-item_1/text = "odd"
+item_0/text = "偶数方（even）"
+item_1/text = "奇数方（odd）"
 
 [node name="HostButton" type="Button" parent="HostVBox"]
 layout_mode = 2
-text = "CLICK TO HOST"
+text = "按下创建"
 
 [node name="HostBackButton" type="Button" parent="HostVBox"]
 layout_mode = 2
-text = "BACK TO MAIN"
+text = "回到主菜单"
 
 [node name="JoinVBox" type="VBoxContainer" parent="."]
 visible = false
@@ -158,25 +157,25 @@ grow_vertical = 2
 
 [node name="TtileLabel" type="Label" parent="JoinVBox"]
 layout_mode = 2
-text = "JOINING"
+text = "加入房间"
 horizontal_alignment = 1
 
 [node name="IpLineEdit" type="LineEdit" parent="JoinVBox"]
 layout_mode = 2
-placeholder_text = "Host IP"
+placeholder_text = "房间IP"
 
 [node name="PortLineEdit" type="LineEdit" parent="JoinVBox"]
 layout_mode = 2
-placeholder_text = "Host Port(7777)"
+placeholder_text = "房间端口:7777"
 expand_to_text_length = true
 
 [node name="JoinButton" type="Button" parent="JoinVBox"]
 layout_mode = 2
-text = "CLICK TO JOIN"
+text = "按下加入"
 
 [node name="JoinBackButton" type="Button" parent="JoinVBox"]
 layout_mode = 2
-text = "BACK TO MAIN"
+text = "回到主菜单"
 
 [node name="BottomLabel" type="Label" parent="JoinVBox"]
 visible = false
@@ -212,12 +211,12 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="LobbyPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Lobby"
+text = "大厅"
 horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="LobbyPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "Players:"
+text = "玩家列表"
 horizontal_alignment = 1
 
 [node name="PlayerList" type="PanelContainer" parent="LobbyPanel/MarginContainer/VBoxContainer"]
@@ -263,7 +262,7 @@ text = "START!"
 
 [node name="BackButton" type="Button" parent="LobbyPanel/MarginContainer/VBoxContainer"]
 layout_mode = 2
-text = "BACK"
+text = "回到主菜单"
 
 [node name="RestartButton" type="Button" parent="."]
 visible = false
@@ -359,7 +358,6 @@ autoplay = true
 [node name="WaterSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_fg0d8")
 volume_db = -15.0
-autoplay = true
 
 [connection signal="pressed" from="MainHBox/MarginContainer/HostPanelButton" to="." method="_on_host_panel_button_pressed"]
 [connection signal="pressed" from="MainHBox/MarginContainer2/JoinPanelButton" to="." method="_on_join_panel_button_pressed"]

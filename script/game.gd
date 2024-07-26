@@ -25,12 +25,31 @@ var time_string : String:
 		return "<"+Time.get_time_string_from_system()+">"
 
 func _ready():
+	get_viewport().size_changed.connect(_on_viewport_size_changed)
 	multiplayer.peer_connected.connect(_peer_connected)
 	multiplayer.peer_disconnected.connect(_peer_disconnected)
 	ui_reset()
 	table.game_end.connect(on_game_end)
 	global_reseted.connect(table.on_global_reset)
 	global_reseted.connect(self.on_global_reset)
+	_on_viewport_size_changed()
+
+func _on_viewport_size_changed():
+	var viewport_size = get_viewport_rect().size
+	size = viewport_size
+	if viewport_size.x <= 540:
+		size.x = 540
+		size.y = float(viewport_size.y) / float(viewport_size.x) * size.x
+	if viewport_size.y <= 540:
+		size.y = 540
+		size.x = float(viewport_size.x) / float(viewport_size.y) * size.y
+	if viewport_size.x >= 1080:
+		size.x = 1080
+		size.y = float(viewport_size.y) / float(viewport_size.x) * size.x
+	if viewport_size.y >= 1080:
+		size.y = 1080
+		size.x = float(viewport_size.x) / float(viewport_size.y) * size.y
+	scale = Vector2(viewport_size) / size
 
 func _input(event):
 	if event is InputEventKey:
@@ -62,12 +81,12 @@ func _on_host_button_pressed():
 	var selected_names = selection_item_list.get_selected_items()
 	var custom_name = ""
 	if len(selected_names) > 0:
-		custom_name = selection_item_list.get_item_text(selected_names[0])
+		custom_name = ["even", "odd"][selected_names[0]]
 	else:
 		custom_name = "even"
 	network.create_server(
 		7777 if port == "" else int(port),
-		"even" if custom_name == "" else custom_name
+		custom_name
 	)
 	user_console_push("服务器已建立！")
 	show_lobby()

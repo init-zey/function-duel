@@ -1,6 +1,7 @@
-[gd_scene load_steps=20 format=3 uid="uid://1euwtkqar7ls"]
+[gd_scene load_steps=22 format=3 uid="uid://1euwtkqar7ls"]
 
 [ext_resource type="Shader" path="res://shader/water_top.gdshader" id="1_e538w"]
+[ext_resource type="Shader" path="res://shader/strip_table.gdshader" id="1_hmxjg"]
 [ext_resource type="Shader" path="res://shader/water_bottom.gdshader" id="2_lwbyn"]
 [ext_resource type="Script" path="res://node/table.gd" id="2_wadsh"]
 [ext_resource type="Shader" path="res://shader/stone.gdshader" id="3_ghshn"]
@@ -11,6 +12,19 @@
 [ext_resource type="Shader" path="res://shader/card_group.gdshader" id="6_spgvu"]
 [ext_resource type="AudioStream" uid="uid://n50xbahf2twl" path="res://asset/sound/win_music.mp3" id="10_8insk"]
 [ext_resource type="AudioStream" uid="uid://c73vcxvdslv5d" path="res://asset/sound/game_lose.mp3" id="11_54n4i"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6s4gt"]
+shader = ExtResource("1_hmxjg")
+shader_parameter/mtime = 0.0
+shader_parameter/slash_speed = -20.0
+shader_parameter/slash_color = Color(0.2, 0.2, 0.2, 1)
+shader_parameter/bg_color = Color(0.4, 0.4, 0.4, 1)
+shader_parameter/resolution = Vector2(288, 162)
+shader_parameter/slash_weight_pixel = 50
+shader_parameter/left_blued_rate = 0.0
+shader_parameter/right_blued_rate = 0.0
+shader_parameter/confirm_modulate = Color(0.2, 0.3, 1, 1)
+shader_parameter/vertical = false
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gbr18"]
 shader = ExtResource("2_lwbyn")
@@ -82,6 +96,7 @@ shader_parameter/shadow_col = Color(0, 0, 0, 0.392157)
 shader_parameter/mtime = null
 
 [node name="Table" type="ColorRect" node_paths=PackedStringArray("even", "odd", "card_stack", "water_top", "water_bottom", "win_sound", "lose_sound", "card_canvas_group", "stone_group")]
+material = SubResource("ShaderMaterial_6s4gt")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -101,6 +116,7 @@ card_canvas_group = NodePath("CardCanvasGroup")
 stone_group = NodePath("StoneGroup")
 
 [node name="WaterBottom" type="ColorRect" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_gbr18")
 layout_mode = 1
 anchors_preset = 15
@@ -111,6 +127,7 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="StoneGroup" type="CanvasGroup" parent="."]
+visible = false
 texture_filter = 1
 material = SubResource("ShaderMaterial_6p2kv")
 
@@ -145,6 +162,7 @@ scale = Vector2(-0.899029, -0.899029)
 sprite_frames = SubResource("SpriteFrames_mk73u")
 
 [node name="WaterTop" type="ColorRect" parent="."]
+visible = false
 material = SubResource("ShaderMaterial_yuh68")
 layout_mode = 1
 anchors_preset = 15

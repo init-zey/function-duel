@@ -53,7 +53,6 @@ func _ready():
 func confirm():
 	if confirmed:
 		return
-	util.play_sound(preload("res://asset/sound/water_splash.mp3"), 0.21, 1)
 	confirmed = true
 	if player_name == "even":
 		var tweener = create_tween()

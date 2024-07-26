@@ -10,14 +10,18 @@ signal game_end(winner)
 			water_top.material.set_shader_parameter("resolution", v)
 			water_bottom.material.set_shader_parameter("resolution", v)
 			stone_group.material.set_shader_parameter("resolution", v)
+			
+			material.set_shader_parameter("resolution", v)
 @export var even_confirm_rate : float:
 	set(v):
 		even_confirm_rate = v
 		water_top.material.set_shader_parameter("left_blued_rate", v)
+		material.set_shader_parameter("left_blued_rate", v)
 @export var odd_confirm_rate : float:
 	set(v):
 		odd_confirm_rate = v
 		water_top.material.set_shader_parameter("right_blued_rate", v)
+		material.set_shader_parameter("right_blued_rate", v)
 @export var even : Player
 @export var odd : Player
 @export var card_stack : Node
@@ -40,6 +44,8 @@ signal game_end(winner)
 			card.vertical = v
 		water_top.material.set_shader_parameter("vertical", v)
 		water_bottom.material.set_shader_parameter("vertical", v)
+		
+		material.set_shader_parameter("vertical", v)
 @export var water_top : ColorRect
 @export var water_bottom : ColorRect
 @export var win_sound : AudioStreamPlayer
@@ -65,24 +71,10 @@ var current_player : Player = null:
 @export var stone_group : CanvasGroup
 
 func _ready():
-	get_viewport().size_changed.connect(_on_viewport_size_changed)
 	self.resized.connect(on_resized)
-	_on_viewport_size_changed()
-	on_resized()
 
 func start():
 	card_stack.start()
-
-func _on_viewport_size_changed():
-	var window_size = get_window().size
-	size = window_size
-	if window_size.x <= 540:
-		size.x = 540
-		size.y = float(window_size.y) / float(window_size.x) * size.x
-	if window_size.y <= 540:
-		size.y = 540
-		size.x = float(window_size.x) / float(window_size.y) * size.y
-	scale = Vector2(window_size) / size
 
 func on_resized():
 	resolution = size/4
@@ -155,6 +147,8 @@ func _process(delta):
 	water_bottom.material.set_shader_parameter("mtime", shader_time)
 	card_canvas_group.material.set_shader_parameter("mtime", shader_time)
 	stone_group.material.set_shader_parameter("mtime", shader_time)
+	
+	material.set_shader_parameter("mtime", shader_time)
 
 func global_confirm():
 	if network.is_host():
