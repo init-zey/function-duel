@@ -8,7 +8,8 @@ signal game_end
 		resolution = v
 		if water_top and water_bottom:
 			water_top.material.set_shader_parameter("resolution", v)
-			water_bottom.material.set_shader_parameter("right_blued_rate", v)
+			water_bottom.material.set_shader_parameter("resolution", v)
+			stone_group.material.set_shader_parameter("resolution", v)
 @export var even_confirm_rate : float:
 	set(v):
 		even_confirm_rate = v
@@ -59,6 +60,7 @@ var current_player : Player = null:
 			odd.current = true
 
 @export var card_canvas_group : CanvasGroup
+@export var stone_group : CanvasGroup
 
 func _ready():
 	get_viewport().size_changed.connect(_on_viewport_size_changed)
@@ -149,6 +151,7 @@ func _process(delta):
 	water_top.material.set_shader_parameter("mtime", shader_time)
 	water_bottom.material.set_shader_parameter("mtime", shader_time)
 	card_canvas_group.material.set_shader_parameter("mtime", shader_time)
+	stone_group.material.set_shader_parameter("mtime", shader_time)
 
 func global_confirm():
 	if network.is_host():

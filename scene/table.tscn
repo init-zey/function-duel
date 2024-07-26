@@ -1,9 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://1euwtkqar7ls"]
+[gd_scene load_steps=18 format=3 uid="uid://1euwtkqar7ls"]
 
 [ext_resource type="Shader" path="res://shader/water_top.gdshader" id="1_e538w"]
 [ext_resource type="Shader" path="res://shader/water_bottom.gdshader" id="2_lwbyn"]
 [ext_resource type="Script" path="res://node/table.gd" id="2_wadsh"]
+[ext_resource type="Shader" path="res://shader/stone.gdshader" id="3_ghshn"]
 [ext_resource type="Script" path="res://node/card_stack.gd" id="3_ofx2a"]
+[ext_resource type="Texture2D" uid="uid://dtev0ly11kfc3" path="res://asset/stone.png" id="3_r2rjc"]
 [ext_resource type="Script" path="res://node/player.gd" id="4_5625h"]
 [ext_resource type="FontFile" uid="uid://ctyqrmo4sxri7" path="res://asset/font/ThaleahFat.ttf" id="4_bpl2a"]
 [ext_resource type="Shader" path="res://shader/card_group.gdshader" id="6_spgvu"]
@@ -20,6 +22,41 @@ shader_parameter/FOAM_COL = Color(0.87451, 0.988235, 1, 1)
 shader_parameter/distortion_speed = -2.0
 shader_parameter/tile = Vector2(5, 5)
 shader_parameter/offset = Vector2(0, 0)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6p2kv"]
+shader = ExtResource("3_ghshn")
+shader_parameter/resolution = Vector2(335.75, 152.5)
+shader_parameter/rock_col = Color(0.5429, 0.849505, 0.89, 1)
+shader_parameter/mtime = null
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_f4jl3"]
+atlas = ExtResource("3_r2rjc")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d2dr5"]
+atlas = ExtResource("3_r2rjc")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_llxve"]
+atlas = ExtResource("3_r2rjc")
+region = Rect2(256, 0, 128, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mk73u"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f4jl3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d2dr5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_llxve")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yuh68"]
 shader = ExtResource("1_e538w")
@@ -42,7 +79,7 @@ shader = ExtResource("6_spgvu")
 shader_parameter/shadow_col = Color(0, 0, 0, 0.392157)
 shader_parameter/mtime = null
 
-[node name="Table" type="ColorRect" node_paths=PackedStringArray("even", "odd", "card_stack", "water_top", "water_bottom", "card_canvas_group")]
+[node name="Table" type="ColorRect" node_paths=PackedStringArray("even", "odd", "card_stack", "water_top", "water_bottom", "card_canvas_group", "stone_group")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -57,6 +94,7 @@ card_stack = NodePath("CardStack")
 water_top = NodePath("WaterTop")
 water_bottom = NodePath("WaterBottom")
 card_canvas_group = NodePath("CardCanvasGroup")
+stone_group = NodePath("StoneGroup")
 
 [node name="WaterBottom" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_gbr18")
@@ -67,6 +105,40 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+
+[node name="StoneGroup" type="CanvasGroup" parent="."]
+texture_filter = 1
+material = SubResource("ShaderMaterial_6p2kv")
+
+[node name="Stone1" type="AnimatedSprite2D" parent="StoneGroup"]
+position = Vector2(214, 243)
+scale = Vector2(0.765141, 0.765141)
+sprite_frames = SubResource("SpriteFrames_mk73u")
+
+[node name="Stone2" type="AnimatedSprite2D" parent="StoneGroup"]
+position = Vector2(312, 439)
+scale = Vector2(0.51584, 0.51584)
+sprite_frames = SubResource("SpriteFrames_mk73u")
+frame = 1
+
+[node name="Stone3" type="AnimatedSprite2D" parent="StoneGroup"]
+position = Vector2(790, 366)
+rotation = -0.523598
+scale = Vector2(-0.989023, -0.989023)
+sprite_frames = SubResource("SpriteFrames_mk73u")
+frame = 2
+
+[node name="Stone4" type="AnimatedSprite2D" parent="StoneGroup"]
+position = Vector2(345, 491)
+scale = Vector2(0.51584, 0.51584)
+sprite_frames = SubResource("SpriteFrames_mk73u")
+frame = 1
+
+[node name="Stone5" type="AnimatedSprite2D" parent="StoneGroup"]
+position = Vector2(892, 209)
+rotation = 0.523598
+scale = Vector2(-0.899029, -0.899029)
+sprite_frames = SubResource("SpriteFrames_mk73u")
 
 [node name="WaterTop" type="ColorRect" parent="."]
 material = SubResource("ShaderMaterial_yuh68")
