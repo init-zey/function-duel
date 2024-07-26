@@ -21,6 +21,24 @@ script = ExtResource("1_likpo")
 [node name="Table" parent="." instance=ExtResource("2_fk7mu")]
 layout_mode = 1
 
+[node name="CopyRight" type="RichTextLabel" parent="."]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -66.0
+grow_horizontal = 0
+grow_vertical = 0
+bbcode_enabled = true
+text = "[right]CC-BY-SA 3.0
+@anti-zey"
+fit_content = true
+autowrap_mode = 0
+
 [node name="MainHBox" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 7
@@ -342,24 +360,6 @@ autoplay = true
 stream = ExtResource("7_fg0d8")
 volume_db = -15.0
 autoplay = true
-
-[node name="CopyRight" type="RichTextLabel" parent="."]
-custom_minimum_size = Vector2(200, 0)
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -100.0
-offset_top = -33.0
-grow_horizontal = 0
-grow_vertical = 0
-bbcode_enabled = true
-text = "[right]CC-BY-SA 3.0
-@anti-zey"
-fit_content = true
-autowrap_mode = 0
 
 [connection signal="pressed" from="MainHBox/MarginContainer/HostPanelButton" to="." method="_on_host_panel_button_pressed"]
 [connection signal="pressed" from="MainHBox/MarginContainer2/JoinPanelButton" to="." method="_on_join_panel_button_pressed"]
