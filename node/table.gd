@@ -1,7 +1,7 @@
 extends ColorRect
 class_name Table
 
-signal game_end
+signal game_end(winner)
 
 @export var resolution : Vector2:
 	set(v):
@@ -42,6 +42,8 @@ signal game_end
 		water_bottom.material.set_shader_parameter("vertical", v)
 @export var water_top : ColorRect
 @export var water_bottom : ColorRect
+@export var win_sound : AudioStreamPlayer
+@export var lose_sound : AudioStreamPlayer
 
 var piles : Array
 var cards : Array
@@ -207,6 +209,10 @@ func clear():
 #endregion
 
 func player_win(player):
+	if player.player_name == network.sender_name or network.sender_name == "local":
+		win_sound.play()
+	else:
+		lose_sound.play()
 	card_stack.ribbon_name = player.player_name
 	var tweener = create_tween()
 	card_stack.show_ribbon = true
@@ -215,7 +221,7 @@ func player_win(player):
 	tweener.set_parallel().tween_property(card_stack, "ribbon_color", Color.WHITE, 0.2)
 	card_stack.show_ribbon = false
 	await get_tree().create_timer(3).timeout
-	game_end.emit()
+	game_end.emit(player)
 
 func on_global_reset():
 	for pile in piles:

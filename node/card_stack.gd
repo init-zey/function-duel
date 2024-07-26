@@ -139,7 +139,7 @@ func deal(cpos=null):
 		cards.resize(len(cards) - 1)
 		card.send_to(player, cpos)
 		card.tween_revolve = 0
-	util.play_sound(preload("res://asset/sound/deal.mp3"))
+	util.play_sound(preload("res://asset/sound/card_appear.mp3"))
 
 func extract_random_name_idx(category) -> int:
 	var sum = 0
@@ -169,6 +169,7 @@ func deal_start():
 
 @rpc('call_local')
 func add_card(category, card_name_idx):
+	util.play_sound(preload("res://asset/sound/card_appear.mp3"), 0, 2, -15-card_name_idx)
 	var new_card = null
 	var card_name = names[category][card_name_idx]
 	if category == "function":

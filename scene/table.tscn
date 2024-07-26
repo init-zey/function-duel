@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://1euwtkqar7ls"]
+[gd_scene load_steps=20 format=3 uid="uid://1euwtkqar7ls"]
 
 [ext_resource type="Shader" path="res://shader/water_top.gdshader" id="1_e538w"]
 [ext_resource type="Shader" path="res://shader/water_bottom.gdshader" id="2_lwbyn"]
@@ -9,6 +9,8 @@
 [ext_resource type="Script" path="res://node/player.gd" id="4_5625h"]
 [ext_resource type="FontFile" uid="uid://ctyqrmo4sxri7" path="res://asset/font/ThaleahFat.ttf" id="4_bpl2a"]
 [ext_resource type="Shader" path="res://shader/card_group.gdshader" id="6_spgvu"]
+[ext_resource type="AudioStream" uid="uid://n50xbahf2twl" path="res://asset/sound/win_music.mp3" id="10_8insk"]
+[ext_resource type="AudioStream" uid="uid://c73vcxvdslv5d" path="res://asset/sound/game_lose.mp3" id="11_54n4i"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_gbr18"]
 shader = ExtResource("2_lwbyn")
@@ -79,7 +81,7 @@ shader = ExtResource("6_spgvu")
 shader_parameter/shadow_col = Color(0, 0, 0, 0.392157)
 shader_parameter/mtime = null
 
-[node name="Table" type="ColorRect" node_paths=PackedStringArray("even", "odd", "card_stack", "water_top", "water_bottom", "card_canvas_group", "stone_group")]
+[node name="Table" type="ColorRect" node_paths=PackedStringArray("even", "odd", "card_stack", "water_top", "water_bottom", "win_sound", "lose_sound", "card_canvas_group", "stone_group")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -93,6 +95,8 @@ odd = NodePath("Odd")
 card_stack = NodePath("CardStack")
 water_top = NodePath("WaterTop")
 water_bottom = NodePath("WaterBottom")
+win_sound = NodePath("WinSound")
+lose_sound = NodePath("LoseSound")
 card_canvas_group = NodePath("CardCanvasGroup")
 stone_group = NodePath("StoneGroup")
 
@@ -247,3 +251,9 @@ material = SubResource("ShaderMaterial_vv3cy")
 use_parent_material = true
 fit_margin = 200.0
 clear_margin = 200.0
+
+[node name="WinSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("10_8insk")
+
+[node name="LoseSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("11_54n4i")

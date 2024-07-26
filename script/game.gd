@@ -17,6 +17,9 @@ signal global_reseted()
 @onready var lobby_start_button := $LobbyPanel/MarginContainer/VBoxContainer/StartButton
 @onready var restart_button := $RestartButton
 @onready var button_sound : AudioStreamPlayer = $ButtonSound
+@onready var win_sound : AudioStreamPlayer = $WinSound
+@onready var lose_sound : AudioStreamPlayer = $LoseSound
+@onready var copy_right := $CopyRight
 var time_string : String:
 	get:
 		return "<"+Time.get_time_string_from_system()+">"
@@ -179,8 +182,10 @@ func _on_lobby_back_button_pressed():
 
 @rpc('call_local')
 func game_start():
+	copy_right.visible = false
 	lobby_panel.visible = false
 	table.current_player = {"even":table.even, "odd":table.odd, "local":null}[network.sender_name]
+	util.play_sound(preload("res://asset/sound/game_start.mp3"))
 	table.start()
 
 func ui_reset():
@@ -197,6 +202,7 @@ func ui_reset():
 	table.even.visible = false
 	table.odd.visible = false
 	restart_button.visible = false
+	copy_right.visible = true
 	turn_offline("even")
 	turn_offline("odd")
 	network.terminate_networking()
@@ -231,7 +237,8 @@ func ask_update():
 	even_color_changed.rpc(even_color_picker.color)
 	odd_color_changed.rpc(odd_color_picker.color)
 
-func on_game_end():
+func on_game_end(winner):
+	button_sound.play()
 	global_reseted.emit()
 
 func on_global_reset():
@@ -239,6 +246,8 @@ func on_global_reset():
 		restart_button.visible = true
 
 func _on_restart_button_pressed():
+	table.win_sound.stop()
+	table.lose_sound.stop()
 	button_sound.play()
 	if network.sender_name != "local":
 		to_lobby.rpc()
