@@ -157,6 +157,7 @@ func _exit_tree():
 			pile.bottom = null
 		elif pile.top == self:
 			pile.top = null
+	mask.queue_free()
 
 func _gui_input(e):
 	if player == null:
@@ -378,8 +379,8 @@ func sync_anchor(server_anchor):
 
 func dissolve():
 	var tweener = create_tween()
-	tweener.tween_property(self, "dissolve_value", 0, 0.2)
-	await tweener.finished
+	tweener.tween_property(self, "dissolve_value", 0, 0.8)
+	await get_tree().create_timer(0.8).timeout
 	queue_free()
 
 func set_shader_parameter(pname, value):

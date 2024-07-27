@@ -17,9 +17,8 @@ signal global_reseted()
 @onready var lobby_start_button := $LobbyPanel/MarginContainer/VBoxContainer/StartButton
 @onready var restart_button := $RestartButton
 @onready var button_sound : AudioStreamPlayer = $ButtonSound
-@onready var win_sound : AudioStreamPlayer = $WinSound
-@onready var lose_sound : AudioStreamPlayer = $LoseSound
 @onready var copy_right := $CopyRight
+@onready var exit_button := $CornerButtonsContainer/MarginContainer2/ExitButton
 var time_string : String:
 	get:
 		return "<"+Time.get_time_string_from_system()+">"
@@ -32,6 +31,7 @@ func _ready():
 	table.game_end.connect(on_game_end)
 	global_reseted.connect(table.on_global_reset)
 	global_reseted.connect(self.on_global_reset)
+	table.card_stack.start_completed.connect(on_start_completed)
 	_on_viewport_size_changed()
 
 func _on_viewport_size_changed():
@@ -108,6 +108,7 @@ func _peer_disconnected(peer_id):
 	turn_offline(network.sender_list[peer_id])
 	if peer_id == 1:
 		user_console_push("服务端断开。")
+		call_deferred("exit")
 	else:
 		var client_name = network.sender_list[peer_id]
 		user_console_push("客户端断开，名称：" + client_name)
@@ -157,6 +158,9 @@ func _on_send_button_pressed():
 	send_local_message()
 
 func send_local_message():
+	if line_edit.text[0] == "/":
+		user_console_push(run_cmd(line_edit.text.substr(1).split(" ")))
+		return
 	if line_edit.text != "":
 		button_sound.play()
 		if network.multiplayer.multiplayer_peer:
@@ -222,6 +226,7 @@ func ui_reset():
 	table.odd.visible = false
 	restart_button.visible = false
 	copy_right.visible = true
+	exit_button.visible = false
 	turn_offline("even")
 	turn_offline("odd")
 	network.terminate_networking()
@@ -261,6 +266,7 @@ func on_game_end(winner):
 	global_reseted.emit()
 
 func on_global_reset():
+	exit_button.visible = false
 	if network.is_host():
 		restart_button.visible = true
 
@@ -291,3 +297,19 @@ func _on_local_play_panel_button_pressed():
 func _on_console_button_pressed():
 	button_sound.play()
 	user_console.visible = !user_console.visible
+
+func run_cmd(cmd):
+	if cmd[0] == "exit":
+		self.exit()
+		return "已尝试退出对局。"
+	return "指令错误"
+
+func exit():
+	ui_reset()
+	global_reseted.emit()
+
+func _on_exit_button_pressed():
+	call_deferred("exit")
+
+func on_start_completed():
+	exit_button.visible = true

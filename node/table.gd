@@ -224,3 +224,5 @@ func on_global_reset():
 		pile.queue_free()
 	for card in cards:
 		card.dissolve()
+	even.disconfirm()
+	odd.disconfirm()

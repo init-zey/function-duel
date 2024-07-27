@@ -25,9 +25,11 @@ uniform vec4 dark_gray_col : source_color = vec4(0.2, 0.2, 0.2, 1.0);
 uniform vec4 confirm_col : source_color = vec4(0.2, 0.3, 1., 1.);
 uniform vec4 maxhighlight_col : source_color = vec4(1.0, 0.0, 0.0, 1.0);
 
-uniform float dissolve_value : hint_range(0,1) = 1;
-uniform float burn_size: hint_range(0.0, 1.0, 0.01) = 0.5;
-uniform vec4 burn_color: source_color = vec4(0.1, .5, 1.0, 1.0);
+uniform float dissolve_value : hint_range(0,1) = 1.0;//溶解程度
+uniform float burn_size: hint_range(0.0, 1.0, 0.01);//火焰大小
+uniform vec4 ash_color: source_color = vec4(0,0,0,1.0);//灰烬颜色
+uniform vec4 burn_color: source_color = vec4(0.882, 0.777, 0.169 , 1.0);//燃烧颜色
+uniform vec4 proburn_color: source_color = vec4(0.804, 0.2, 0.093 , 1.0);//超级燃烧颜色
 
 
 bool in_rect(vec2 pxy, vec2 pos, vec2 size){
@@ -134,6 +136,9 @@ void fragment(){
 	float burn_size_step = burn_size * step(0.001, dissolve_value) * step(dissolve_value, 0.999);
 	float threshold = smoothstep(noise-burn_size_step, noise, dissolve_value);
 	float border = smoothstep(noise, noise + burn_size_step, dissolve_value);
+	
 	COLOR.a *= threshold;
-	COLOR.rgb = mix(burn_color.rgb, COLOR.rgb, border);
+	vec3 new_burn_color1 = mix(proburn_color.rgb , burn_color.rgb , 1.0-pow(1.0-border , 5));
+	vec3 new_burn_color2 = mix(ash_color.rgb , new_burn_color1 , 1.0-pow(1.0-border , 1000));
+	COLOR.rgb = mix(new_burn_color2, COLOR.rgb, border);
 }

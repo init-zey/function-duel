@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://c5joj7nr7xqwa"]
+[gd_scene load_steps=9 format=3 uid="uid://c5joj7nr7xqwa"]
 
 [ext_resource type="Script" path="res://script/game.gd" id="1_likpo"]
 [ext_resource type="Script" path="res://script/ip_button.gd" id="2_6qx1a"]
 [ext_resource type="PackedScene" uid="uid://1euwtkqar7ls" path="res://scene/table.tscn" id="2_fk7mu"]
 [ext_resource type="Texture2D" uid="uid://c4h8hhh3oyleq" path="res://asset/user_interface/console.png" id="4_h4mgg"]
 [ext_resource type="AudioStream" uid="uid://0026bygpwj3q" path="res://asset/sound/button.mp3" id="5_c5ijm"]
+[ext_resource type="Texture2D" uid="uid://chn7eiva5euu8" path="res://asset/exit.png" id="5_mpa2a"]
 [ext_resource type="AudioStream" uid="uid://cu1oicuiyf6q5" path="res://asset/sound/enter.mp3" id="6_mqmju"]
 [ext_resource type="AudioStream" uid="uid://btvuhvcxf2j6s" path="res://asset/sound/running_water.mp3" id="7_fg0d8"]
 
@@ -324,20 +325,24 @@ size_flags_horizontal = 3
 layout_mode = 2
 text = "发送"
 
-[node name="ConsoleButtonContainer" type="MarginContainer" parent="."]
+[node name="CornerButtonsContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -120.0
-offset_bottom = 120.0
+offset_bottom = 240.0
 grow_horizontal = 0
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
 
-[node name="ConsoleButton" type="TextureButton" parent="ConsoleButtonContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CornerButtonsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="ConsoleButton" type="TextureButton" parent="CornerButtonsContainer/MarginContainer"]
 texture_filter = 1
 layout_mode = 2
 texture_normal = ExtResource("4_h4mgg")
@@ -345,6 +350,25 @@ texture_pressed = ExtResource("4_h4mgg")
 texture_hover = ExtResource("4_h4mgg")
 texture_disabled = ExtResource("4_h4mgg")
 texture_focused = ExtResource("4_h4mgg")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="MarginContainer2" type="MarginContainer" parent="CornerButtonsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="ExitButton" type="TextureButton" parent="CornerButtonsContainer/MarginContainer2"]
+texture_filter = 1
+layout_mode = 2
+texture_normal = ExtResource("5_mpa2a")
+texture_pressed = ExtResource("5_mpa2a")
+texture_hover = ExtResource("5_mpa2a")
+texture_disabled = ExtResource("5_mpa2a")
+texture_focused = ExtResource("5_mpa2a")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -372,4 +396,5 @@ volume_db = -15.0
 [connection signal="pressed" from="LobbyPanel/MarginContainer/VBoxContainer/BackButton" to="." method="_on_lobby_back_button_pressed"]
 [connection signal="pressed" from="RestartButton" to="." method="_on_restart_button_pressed"]
 [connection signal="pressed" from="UserConsole/HBoxContainer/SendButton" to="." method="_on_send_button_pressed"]
-[connection signal="pressed" from="ConsoleButtonContainer/ConsoleButton" to="." method="_on_console_button_pressed"]
+[connection signal="pressed" from="CornerButtonsContainer/MarginContainer/ConsoleButton" to="." method="_on_console_button_pressed"]
+[connection signal="pressed" from="CornerButtonsContainer/MarginContainer2/ExitButton" to="." method="_on_exit_button_pressed"]

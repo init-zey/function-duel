@@ -4,6 +4,7 @@ class_name CardStack
 signal assemble_completed()
 signal start_deal_completed()
 signal cards_inited()
+signal start_completed()
 
 static func find_proper_size(n:int)->Vector2i:
 	var i:int=floor(sqrt(n))
@@ -132,7 +133,10 @@ func start():
 	for t in range(1):
 		assemble(GAME_SCHEME)
 	await assemble_completed
-	start_complete = true
+	if network.multiplayer.multiplayer_peer:
+		complete_start.rpc()
+	else:
+		complete_start()
 
 @rpc('call_local')
 func deal(cpos=null):
@@ -190,3 +194,8 @@ func add_card(category, card_name_idx):
 @rpc('call_local')
 func assemble_complete():
 	assemble_completed.emit()
+
+@rpc('call_local')
+func complete_start():
+	start_complete = true
+	start_completed.emit()
