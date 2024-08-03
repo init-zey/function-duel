@@ -1,8 +1,9 @@
 @tool
-extends Label
+extends Control
 class_name Player
 
 @export var table : Table
+@export var player_label : Label
 @export var player_name : String
 @export var rect : Rect2
 @export var opposite_player : Player
@@ -10,34 +11,40 @@ class_name Player
 @export var card_color : Color = Color.WHITE:
 	set(v):
 		card_color = v
-		self.modulate = card_color
+		if player_label:
+			player_label.modulate = card_color
 @export var custom_player_name : String = "default_player":
 	set(v):
 		custom_player_name = v
-		update_text()
-@export var v_anchor : Vector2
-@export var v_bottom_offset : float
-@export var v_top_offset : float
-@export var v_right_offset : float
-@export var v_left_offset : float
-@export var h_anchor : Vector2
-@export var h_bottom_offset : float
-@export var h_top_offset : float
-@export var h_right_offset : float
-@export var h_left_offset : float
+		if player_label:
+			update_text()
+@export var v_to_bottom : bool = false
 @export var vertical : bool = false:
 	set(v):
 		vertical = v
 		if v:
-			set_anchor_and_offset(SIDE_TOP, v_anchor.y, v_top_offset, true)
-			set_anchor_and_offset(SIDE_BOTTOM, v_anchor.y, v_bottom_offset, true)
-			set_anchor_and_offset(SIDE_LEFT, v_anchor.x, v_left_offset, true)
-			set_anchor_and_offset(SIDE_RIGHT, v_anchor.x, v_right_offset, true)
+			set_anchor(SIDE_LEFT, rect.position.y, true, false)
+			set_anchor(SIDE_TOP, rect.position.x, true, false)
+			set_anchor(SIDE_RIGHT, rect.end.y, true, false)
+			set_anchor(SIDE_BOTTOM, rect.end.x, true, false)
+			if v_to_bottom:
+				var player_label_container = player_label.get_parent()
+				player_label_container.set_anchor(SIDE_TOP, 1, true, false)
+				player_label_container.set_anchor(SIDE_BOTTOM, 1, true, false)
+				player_label_container.offset_top = -300
+				player_label_container.offset_bottom = 0
 		else:
-			set_anchor_and_offset(SIDE_TOP, h_anchor.y, h_top_offset, true)
-			set_anchor_and_offset(SIDE_BOTTOM, h_anchor.y, h_bottom_offset, true)
-			set_anchor_and_offset(SIDE_LEFT, h_anchor.x, h_left_offset, true)
-			set_anchor_and_offset(SIDE_RIGHT, h_anchor.x, h_right_offset, true)
+			set_anchor(SIDE_LEFT, rect.position.x, true, false)
+			set_anchor(SIDE_TOP, rect.position.y, true, false)
+			set_anchor(SIDE_RIGHT, rect.end.x, true, false)
+			set_anchor(SIDE_BOTTOM, rect.end.y, true, false)
+			if v_to_bottom:
+				var player_label_container = player_label.get_parent()
+				player_label_container.set_anchor(SIDE_TOP, 0, true, false)
+				player_label_container.set_anchor(SIDE_BOTTOM, 0, true, false)
+				player_label_container.offset_top = 0
+				player_label_container.offset_bottom = 300
+			
 @export var current : bool = false:
 	set(v):
 		current = v
@@ -92,5 +99,5 @@ func receive_place(real_card_size):
 		return table.size/2 + Vector2(real_card_size.x, 0)
 
 func update_text():
-	text = ("-{0}-" if current else "{0}").format([custom_player_name])
+	player_label.text = ("-{0}-" if current else "{0}").format([custom_player_name])
 	

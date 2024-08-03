@@ -219,7 +219,7 @@ func player_win(player):
 	await get_tree().create_timer(3).timeout
 	game_end.emit(player)
 
-func on_global_reset():
+func on_global_reset(manually):
 	for pile in piles:
 		pile.queue_free()
 	for card in cards:

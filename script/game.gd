@@ -1,6 +1,6 @@
 extends Control
 
-signal global_reseted()
+signal global_reseted(mannualy)
 
 @onready var table := $Table
 @onready var user_console := $UserConsole
@@ -36,6 +36,7 @@ func _ready():
 	_on_viewport_size_changed()
 
 func _on_viewport_size_changed():
+	position = Vector2()
 	var viewport_size = get_viewport_rect().size
 	size = viewport_size
 	if viewport_size.x <= 540:
@@ -159,10 +160,10 @@ func _on_send_button_pressed():
 	send_local_message()
 
 func send_local_message():
-	if line_edit.text[0] == "/":
-		user_console_push(run_cmd(line_edit.text.substr(1).split(" ")))
-		return
 	if line_edit.text != "":
+		if line_edit.text[0] == "/":
+			user_console_push(run_cmd(line_edit.text.substr(1).split(" ")))
+			return
 		button_sound.play()
 		if network.multiplayer.multiplayer_peer:
 			append.rpc(network.sender_name, line_edit.text)
@@ -229,9 +230,9 @@ func ui_reset():
 	copy_right.visible = true
 	exit_button.visible = false
 	even_color_picker.color = Color(1, 1, 0.702)
-	_on_even_color_picker_button_color_changed(even_color_picker.color)
+	table.even.card_color = even_color_picker.color
 	odd_color_picker.color = Color(0.702, 0.961, 1)
-	_on_odd_color_picker_button_color_changed(odd_color_picker.color)
+	table.odd.card_color = odd_color_picker.color
 	
 	turn_offline("even")
 	turn_offline("odd")
@@ -269,11 +270,11 @@ func ask_update():
 
 func on_game_end(winner):
 	button_sound.play()
-	global_reseted.emit()
+	global_reseted.emit(false)
 
-func on_global_reset():
+func on_global_reset(manually):
 	exit_button.visible = false
-	if network.is_host():
+	if network.is_host() and not manually:
 		restart_button.visible = true
 
 func _on_restart_button_pressed():
@@ -312,7 +313,7 @@ func run_cmd(cmd):
 
 func exit():
 	ui_reset()
-	global_reseted.emit()
+	global_reseted.emit(true)
 
 func _on_exit_button_pressed():
 	call_deferred("exit")
