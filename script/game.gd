@@ -227,6 +227,11 @@ func ui_reset():
 	restart_button.visible = false
 	copy_right.visible = true
 	exit_button.visible = false
+	even_color_picker.color = Color(1, 1, 0.702)
+	_on_even_color_picker_button_color_changed(even_color_picker.color)
+	odd_color_picker.color = Color(0.702, 0.961, 1)
+	_on_odd_color_picker_button_color_changed(odd_color_picker.color)
+	
 	turn_offline("even")
 	turn_offline("odd")
 	network.terminate_networking()
