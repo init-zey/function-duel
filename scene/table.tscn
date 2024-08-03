@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://1euwtkqar7ls"]
+[gd_scene load_steps=25 format=3 uid="uid://1euwtkqar7ls"]
 
 [ext_resource type="Shader" path="res://shader/water_top.gdshader" id="1_e538w"]
 [ext_resource type="Shader" path="res://shader/strip_table.gdshader" id="1_hmxjg"]
@@ -90,16 +90,18 @@ shader_parameter/distortion_speed = -2.0
 shader_parameter/tile = Vector2(5, 5)
 shader_parameter/offset = Vector2(0, 0)
 
-[sub_resource type="LabelSettings" id="LabelSettings_kqat5"]
-font_size = 96
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b4lwo"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 border_width_left = 8
 border_width_top = 8
 border_width_right = 8
 border_width_bottom = 8
-border_color = Color(0.8, 0.8, 0.8, 0.509804)
+border_color = Color(0.8, 0.8, 0.8, 0.560784)
+
+[sub_resource type="LabelSettings" id="LabelSettings_kqat5"]
+font_size = 96
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_k5q0e"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_vv3cy"]
 shader = ExtResource("6_spgvu")
@@ -213,18 +215,30 @@ bbcode_enabled = true
 text = "[center][wave amp=50.0 freq=5.0 connected=1][font size=100]FUNCTION [font size=150](DUEL)"
 fit_content = true
 
-[node name="Even" type="Control" parent="." node_paths=PackedStringArray("table", "player_label")]
+[node name="Even" type="Control" parent="." node_paths=PackedStringArray("table", "player_label", "opposite_player")]
 layout_mode = 1
 anchor_right = 0.5
 anchor_bottom = 1.0
 grow_horizontal = 2
+mouse_filter = 2
 script = ExtResource("4_5625h")
 table = NodePath("..")
 player_label = NodePath("MarginContainer/Label")
 player_name = "even"
 rect = Rect2(0, 0, 0.5, 1)
+opposite_player = NodePath("../Odd")
 card_color = Color(1, 1, 0.7, 1)
 custom_player_name = "even"
+
+[node name="FrameWorkPanel" type="Panel" parent="Even"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_b4lwo")
 
 [node name="MarginContainer" type="MarginContainer" parent="Even"]
 custom_minimum_size = Vector2(300, 300)
@@ -246,21 +260,13 @@ label_settings = SubResource("LabelSettings_kqat5")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="FrameWorkPanel" type="Panel" parent="Even"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_b4lwo")
-
 [node name="Odd" type="Control" parent="." node_paths=PackedStringArray("table", "player_label", "opposite_player")]
 layout_mode = 1
 anchor_left = 0.5
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
+mouse_filter = 2
 script = ExtResource("4_5625h")
 table = NodePath("..")
 player_label = NodePath("MarginContainer2/Label")
@@ -270,6 +276,17 @@ opposite_player = NodePath("../Even")
 card_color = Color(0.7, 0.96, 1, 1)
 custom_player_name = "odd"
 v_to_bottom = true
+
+[node name="FrameWorkPanel" type="Panel" parent="Odd"]
+material = SubResource("ShaderMaterial_k5q0e")
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_b4lwo")
 
 [node name="MarginContainer2" type="MarginContainer" parent="Odd"]
 custom_minimum_size = Vector2(300, 300)
@@ -290,15 +307,6 @@ text = "-ODD-"
 label_settings = SubResource("LabelSettings_kqat5")
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="FrameWorkPanel" type="Panel" parent="Odd"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_b4lwo")
 
 [node name="CardCanvasGroup" type="CanvasGroup" parent="."]
 material = SubResource("ShaderMaterial_vv3cy")

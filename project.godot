@@ -29,7 +29,7 @@ util="*res://script/util.gd"
 
 [display]
 
-window/handheld/orientation=1
+window/handheld/orientation=5
 
 [dotnet]
 
