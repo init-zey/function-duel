@@ -5,6 +5,7 @@ signal global_reseted()
 @onready var table := $Table
 @onready var user_console := $UserConsole
 @onready var console_label := $UserConsole/ColorRect/MarginContainer/RichTextLabel
+@onready var help_document := $HelpDocument
 @onready var line_edit := $UserConsole/HBoxContainer/LineEdit
 @onready var main_h_box := $MainHBox
 @onready var host_v_box := $HostVBox
@@ -318,3 +319,7 @@ func _on_exit_button_pressed():
 
 func on_start_completed():
 	exit_button.visible = true
+
+
+func _on_help_button_pressed():
+	help_document.visible = true

@@ -130,7 +130,7 @@ func start():
 	deal_start()
 	await start_deal_completed
 	await get_tree().create_timer(1).timeout
-	for t in range(1):
+	for t in range(6):
 		assemble(GAME_SCHEME)
 	await assemble_completed
 	if network.multiplayer.multiplayer_peer:
