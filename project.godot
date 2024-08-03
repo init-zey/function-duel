@@ -15,7 +15,7 @@ config/name_localized={
 "en": "Function(Duel)",
 "zh_CN": "函数(决斗)"
 }
-config/version="1.0.6"
+config/version="1.0.7"
 run/main_scene="res://scene/game.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 boot_splash/show_image=false

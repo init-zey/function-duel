@@ -23,4 +23,7 @@ func terminate_networking():
 	sender_name = null
 
 func is_host():
-	return sender_name == "local" or multiplayer.is_server()
+	if multiplayer.multiplayer_peer:
+		return multiplayer.is_server()
+	else:
+		return true

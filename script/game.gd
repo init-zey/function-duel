@@ -322,4 +322,9 @@ func on_start_completed():
 
 
 func _on_help_button_pressed():
+	button_sound.play()
 	help_document.visible = true
+
+func _on_help_document_close_button_pressed():
+	button_sound.play()
+	help_document.visible = false

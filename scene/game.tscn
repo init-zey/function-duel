@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://c5joj7nr7xqwa"]
+[gd_scene load_steps=17 format=3 uid="uid://c5joj7nr7xqwa"]
 
 [ext_resource type="Script" path="res://script/game.gd" id="1_likpo"]
 [ext_resource type="Script" path="res://script/ip_button.gd" id="2_6qx1a"]
@@ -14,7 +14,8 @@
 [ext_resource type="FontFile" uid="uid://cf1nxlcsrtty8" path="res://asset/font/lxgw-wenkai-v1.330/LXGWWenKai-Regular.ttf" id="7_xb1kc"]
 [ext_resource type="FontFile" uid="uid://coyyulc3totm4" path="res://asset/font/lxgw-wenkai-v1.330/LXGWWenKai-Bold.ttf" id="8_btc7n"]
 [ext_resource type="FontFile" uid="uid://cq6k2i6nkxus3" path="res://asset/font/lxgw-wenkai-v1.330/LXGWWenKaiMono-Regular.ttf" id="9_h2cyl"]
-[ext_resource type="Script" path="res://script/help_document.gd" id="10_2ktlb"]
+[ext_resource type="Texture2D" uid="uid://diurs03iyj4f2" path="res://asset/user_interface/close.png" id="13_hdima"]
+[ext_resource type="Script" path="res://script/help_document_label.gd" id="13_v4p66"]
 
 [node name="Game" type="Control"]
 layout_mode = 3
@@ -335,14 +336,35 @@ text = "发送"
 
 [node name="CornerButtonsContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -60.0
 offset_bottom = 180.0
 grow_horizontal = 0
 
+[node name="MarginContainer3" type="MarginContainer" parent="CornerButtonsContainer"]
+custom_minimum_size = Vector2(60, 60)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="HelpButton" type="TextureButton" parent="CornerButtonsContainer/MarginContainer3"]
+texture_filter = 1
+layout_mode = 2
+texture_normal = ExtResource("7_546en")
+texture_pressed = ExtResource("7_546en")
+texture_hover = ExtResource("7_546en")
+texture_disabled = ExtResource("7_546en")
+texture_focused = ExtResource("7_546en")
+ignore_texture_size = true
+stretch_mode = 0
+
 [node name="MarginContainer" type="MarginContainer" parent="CornerButtonsContainer"]
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 6
@@ -362,6 +384,7 @@ ignore_texture_size = true
 stretch_mode = 0
 
 [node name="MarginContainer2" type="MarginContainer" parent="CornerButtonsContainer"]
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 6
@@ -377,25 +400,6 @@ texture_pressed = ExtResource("5_mpa2a")
 texture_hover = ExtResource("5_mpa2a")
 texture_disabled = ExtResource("5_mpa2a")
 texture_focused = ExtResource("5_mpa2a")
-ignore_texture_size = true
-stretch_mode = 0
-
-[node name="MarginContainer3" type="MarginContainer" parent="CornerButtonsContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/margin_left = 6
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 6
-theme_override_constants/margin_bottom = 6
-
-[node name="HelpButton" type="TextureButton" parent="CornerButtonsContainer/MarginContainer3"]
-texture_filter = 1
-layout_mode = 2
-texture_normal = ExtResource("7_546en")
-texture_pressed = ExtResource("7_546en")
-texture_hover = ExtResource("7_546en")
-texture_disabled = ExtResource("7_546en")
-texture_focused = ExtResource("7_546en")
 ignore_texture_size = true
 stretch_mode = 0
 
@@ -439,7 +443,7 @@ text = "[font size=20]欢迎来到[b][font_size=20]决斗(函数)[/font_size][/b
 
 免责声明：本游戏尚处于开发阶段，甚至连名字都没想好，请高抬贵手留下您的优化意见。
 
-[url=https://space.bilibili.com/3546704672459594/]B站UID：3546704672459594（点击跳转）[/url]
+[url=https://space.bilibili.com/3546704672459594/]B站UID：3546704672459594（点击复制链接）[/url]
 
 
 [font size=30] § 1.为什么叫决斗(函数)？[/font]
@@ -514,7 +518,30 @@ text = "[font size=20]欢迎来到[b][font_size=20]决斗(函数)[/font_size][/b
 
 祝游玩愉快！"
 fit_content = true
-script = ExtResource("10_2ktlb")
+script = ExtResource("13_v4p66")
+
+[node name="MarginContainer" type="MarginContainer" parent="HelpDocument"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -80.0
+offset_right = -20.0
+offset_bottom = 60.0
+grow_horizontal = 0
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="HelpDocumentCloseButton" type="TextureButton" parent="HelpDocument/MarginContainer"]
+layout_mode = 2
+texture_normal = ExtResource("13_hdima")
+texture_pressed = ExtResource("13_hdima")
+texture_hover = ExtResource("13_hdima")
+texture_disabled = ExtResource("13_hdima")
+texture_focused = ExtResource("13_hdima")
+stretch_mode = 0
 
 [node name="ButtonSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_c5ijm")
@@ -540,7 +567,8 @@ volume_db = -15.0
 [connection signal="pressed" from="LobbyPanel/MarginContainer/VBoxContainer/BackButton" to="." method="_on_lobby_back_button_pressed"]
 [connection signal="pressed" from="RestartButton" to="." method="_on_restart_button_pressed"]
 [connection signal="pressed" from="UserConsole/HBoxContainer/SendButton" to="." method="_on_send_button_pressed"]
+[connection signal="pressed" from="CornerButtonsContainer/MarginContainer3/HelpButton" to="." method="_on_help_button_pressed"]
 [connection signal="pressed" from="CornerButtonsContainer/MarginContainer/ConsoleButton" to="." method="_on_console_button_pressed"]
 [connection signal="pressed" from="CornerButtonsContainer/MarginContainer2/ExitButton" to="." method="_on_exit_button_pressed"]
-[connection signal="pressed" from="CornerButtonsContainer/MarginContainer3/HelpButton" to="." method="_on_help_button_pressed"]
 [connection signal="meta_clicked" from="HelpDocument/ScrollContainer/MarginContainer/RichTextLabel" to="HelpDocument/ScrollContainer/MarginContainer/RichTextLabel" method="_on_meta_clicked"]
+[connection signal="pressed" from="HelpDocument/MarginContainer/HelpDocumentCloseButton" to="." method="_on_help_document_close_button_pressed"]
