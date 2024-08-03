@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://g2ft3h6l7jos"
-path="res://.godot/imported/HiPaint_1721236284374.png-87327762332a7306a76a1d87c872077e.ctex"
+uid="uid://2y6st3wpl4ed"
+path="res://.godot/imported/icon-29@2x.png-bfa5b420a00fdac2c0686113c915250e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/HiPaint_1721236284374.png"
-dest_files=["res://.godot/imported/HiPaint_1721236284374.png-87327762332a7306a76a1d87c872077e.ctex"]
+source_file="res://icons/ios/AppIcon.appiconset/icon-29@2x.png"
+dest_files=["res://.godot/imported/icon-29@2x.png-bfa5b420a00fdac2c0686113c915250e.ctex"]
 
 [params]
 

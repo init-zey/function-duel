@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dsualvigk72vv"
-path="res://.godot/imported/sqr.png-23551fd878b5bed4e306d134b556e25b.ctex"
+uid="uid://c26408fhajuho"
+path="res://.godot/imported/icon-68@2x.png-5d7ebb65459b3a3496098f28802a7a15.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/sqr.png"
-dest_files=["res://.godot/imported/sqr.png-23551fd878b5bed4e306d134b556e25b.ctex"]
+source_file="res://icons/ios/AppIcon.appiconset/icon-68@2x.png"
+dest_files=["res://.godot/imported/icon-68@2x.png-5d7ebb65459b3a3496098f28802a7a15.ctex"]
 
 [params]
 

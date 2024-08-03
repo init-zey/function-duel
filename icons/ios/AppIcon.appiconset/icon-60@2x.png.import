@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://omeby4qpq8rw"
-path="res://.godot/imported/x.png-2a7595207058a53c42af1b68ab18e239.ctex"
+uid="uid://cdc5r7ccb1y2o"
+path="res://.godot/imported/icon-60@2x.png-090933281b5ade6c1945a515f41bf47e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/x.png"
-dest_files=["res://.godot/imported/x.png-2a7595207058a53c42af1b68ab18e239.ctex"]
+source_file="res://icons/ios/AppIcon.appiconset/icon-60@2x.png"
+dest_files=["res://.godot/imported/icon-60@2x.png-090933281b5ade6c1945a515f41bf47e.ctex"]
 
 [params]
 

@@ -48,11 +48,13 @@ static func create(table, function_name, player):
 			FunctionName.FLOOR : "floor(x)",
 		}.get(v)
 		update_face_pattern({
-			FunctionName.X : preload("res://asset/x.png"),
-			FunctionName.EXP : preload("res://asset/exp.png"),
-			FunctionName.REVERSE : preload("res://asset/reverse.png"),
-			FunctionName.SQR : preload("res://asset/sqr.png"),
-			FunctionName.SQRT : preload("res://asset/sqrt.png"),
+			FunctionName.X : preload("res://asset/sprite/function/x.png"),
+			FunctionName.EXP : preload("res://asset/sprite/function/exp.png"),
+			FunctionName.REVERSE : preload("res://asset/sprite/function/reverse.png"),
+			FunctionName.SQR : preload("res://asset/sprite/function/sqr.png"),
+			FunctionName.SQRT : preload("res://asset/sprite/function/sqrt.png"),
+			FunctionName.MUL : preload("res://asset/sprite/function/mul.png"),
+			FunctionName.COS : preload("res://asset/sprite/function/cos.png"),
 		}.get(v))
 
 func process(bottom):

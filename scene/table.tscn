@@ -6,7 +6,7 @@
 [ext_resource type="Script" path="res://node/table.gd" id="2_wadsh"]
 [ext_resource type="Shader" path="res://shader/stone.gdshader" id="3_ghshn"]
 [ext_resource type="Script" path="res://node/card_stack.gd" id="3_ofx2a"]
-[ext_resource type="Texture2D" uid="uid://dtev0ly11kfc3" path="res://asset/stone.png" id="3_r2rjc"]
+[ext_resource type="Texture2D" uid="uid://dtev0ly11kfc3" path="res://asset/user_interface/stone.png" id="3_r2rjc"]
 [ext_resource type="Script" path="res://node/player.gd" id="4_5625h"]
 [ext_resource type="FontFile" uid="uid://ctyqrmo4sxri7" path="res://asset/font/ThaleahFat.ttf" id="4_bpl2a"]
 [ext_resource type="Shader" path="res://shader/card_group.gdshader" id="6_spgvu"]

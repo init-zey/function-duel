@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dtev0ly11kfc3"
-path="res://.godot/imported/stone.png-509f7b85d087fb4d2c589416728bcaed.ctex"
+uid="uid://iwwvo3u1mwph"
+path="res://.godot/imported/ic_launcher.png-025b34f285c7521af906ba7268531f47.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://asset/stone.png"
-dest_files=["res://.godot/imported/stone.png-509f7b85d087fb4d2c589416728bcaed.ctex"]
+source_file="res://icons/android/mipmap-ldpi/ic_launcher.png"
+dest_files=["res://.godot/imported/ic_launcher.png-025b34f285c7521af906ba7268531f47.ctex"]
 
 [params]
 
