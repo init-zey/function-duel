@@ -230,6 +230,7 @@ func ui_reset():
 	table.card_stack.ribbon_label.text = "[center][wave amp=50.0 freq=5.0 connected=1][font size=100]FUNCTION [font size=150](DUEL)"
 	table.card_stack.ribbon_color = Color.WHITE
 	table.card_stack.show_ribbon = true
+	table.card_stack.bottom_label.visible = false
 	table.even.visible = false
 	table.odd.visible = false
 	restart_button.visible = false

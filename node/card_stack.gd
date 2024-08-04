@@ -102,6 +102,7 @@ var deck_remain : Dictionary = deck
 			var tweener = create_tween()
 			tweener.tween_property(ribbon_label, "visible_ratio", 1 if v else 0, 1)
 		show_ribbon = v
+@export var bottom_label : Label
 var start_complete : bool
 
 func assemble(scheme):
@@ -143,6 +144,7 @@ func start():
 		complete_start.rpc()
 	else:
 		complete_start()
+	bottom_label.visible = true
 
 @rpc('call_local')
 func deal(cpos=null):
@@ -153,6 +155,7 @@ func deal(cpos=null):
 		card.send_to(player, cpos)
 		card.tween_revolve = 0
 	util.play_sound(preload("res://asset/sound/card_appear.mp3"))
+	update_bottom_label()
 
 func extract_random_name_idx(category) -> int:
 	var sum = 0
@@ -196,6 +199,7 @@ func add_card(category, card_name_idx):
 	new_card.center_position = position
 	new_card.revolve = PI/2
 	new_card.tween_revolve = PI
+	update_bottom_label()
 
 @rpc('call_local')
 func assemble_complete():
@@ -205,3 +209,6 @@ func assemble_complete():
 func complete_start():
 	start_complete = true
 	start_completed.emit()
+
+func update_bottom_label():
+	bottom_label.text = "剩余牌数：" + str(len(cards))

@@ -185,7 +185,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="CardStack" type="Control" parent="." node_paths=PackedStringArray("table", "even", "odd")]
+[node name="CardStack" type="Control" parent="." node_paths=PackedStringArray("table", "even", "odd", "bottom_label")]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -198,6 +198,7 @@ script = ExtResource("3_ofx2a")
 table = NodePath("..")
 even = NodePath("../Even")
 odd = NodePath("../Odd")
+bottom_label = NodePath("Control/Label")
 
 [node name="RibbonLabel" type="RichTextLabel" parent="CardStack"]
 layout_mode = 1
@@ -214,6 +215,26 @@ theme_override_fonts/normal_font = ExtResource("4_bpl2a")
 bbcode_enabled = true
 text = "[center][wave amp=50.0 freq=5.0 connected=1][font size=100]FUNCTION [font size=150](DUEL)"
 fit_content = true
+
+[node name="Control" type="Control" parent="CardStack"]
+layout_mode = 1
+offset_bottom = 120.0
+
+[node name="Label" type="Label" parent="CardStack/Control"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_top = -33.0
+offset_right = 24.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "123"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Even" type="Control" parent="." node_paths=PackedStringArray("table", "player_label", "opposite_player")]
 layout_mode = 1
