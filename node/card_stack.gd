@@ -2,6 +2,7 @@ extends Control
 class_name CardStack
 
 signal assemble_completed()
+signal stack_completed()
 signal start_deal_completed()
 signal cards_inited()
 signal start_completed()
@@ -130,9 +131,14 @@ func start():
 	deal_start()
 	await start_deal_completed
 	await get_tree().create_timer(1).timeout
-	for t in range(2):
-		assemble(GAME_SCHEME)
-		await assemble_completed
+	if network.is_host():
+		for t in range(util.get_game_setting("stack_size")):
+			assemble(GAME_SCHEME)
+			await assemble_completed
+		if network.multiplayer.multiplayer_peer:
+			rpc("emit_signal", "stack_completed")
+	else:
+		await stack_completed
 	if network.multiplayer.multiplayer_peer:
 		complete_start.rpc()
 	else:

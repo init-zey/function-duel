@@ -7,7 +7,7 @@ signal global_reseted(mannualy)
 @onready var console_label := $UserConsole/ColorRect/MarginContainer/RichTextLabel
 @onready var help_document := $HelpDocument
 @onready var line_edit := $UserConsole/HBoxContainer/LineEdit
-@onready var main_h_box := $MainHBox
+@onready var main_box := $MainBox
 @onready var host_v_box := $HostVBox
 @onready var join_v_box := $JoinVBox
 @onready var lobby_panel := $LobbyPanel
@@ -20,6 +20,7 @@ signal global_reseted(mannualy)
 @onready var button_sound : AudioStreamPlayer = $ButtonSound
 @onready var copy_right := $CopyRight
 @onready var exit_button := $CornerButtonsContainer/MarginContainer2/ExitButton
+@onready var setting_panel := $SettingPanel
 var time_string : String:
 	get:
 		return "<"+Time.get_time_string_from_system()+">"
@@ -38,18 +39,23 @@ func _ready():
 func _on_viewport_size_changed():
 	position = Vector2()
 	var viewport_size = get_viewport_rect().size
+	var ui_scale = 1
+	if util.loaded:
+		ui_scale = util.get_game_setting("ui_scale")
 	size = viewport_size
-	if viewport_size.x <= 540:
-		size.x = 540
+	var new_width = int(float(1080) / ui_scale)
+	var new_height = int(float(540) / ui_scale)
+	if viewport_size.x <= new_height:
+		size.x = new_height
 		size.y = float(viewport_size.y) / float(viewport_size.x) * size.x
-	if viewport_size.y <= 540:
-		size.y = 540
+	if viewport_size.y <= new_height:
+		size.y = new_height
 		size.x = float(viewport_size.x) / float(viewport_size.y) * size.y
-	if viewport_size.x >= 1080:
-		size.x = 1080
+	if viewport_size.x >= new_width:
+		size.x = 1080 / ui_scale
 		size.y = float(viewport_size.y) / float(viewport_size.x) * size.x
-	if viewport_size.y >= 1080:
-		size.y = 1080
+	if viewport_size.y >= new_width:
+		size.y = new_width
 		size.x = float(viewport_size.x) / float(viewport_size.y) * size.y
 	scale = Vector2(viewport_size) / size
 
@@ -67,12 +73,12 @@ func append(other_sender_name, message):
 
 func _on_host_panel_button_pressed():
 	button_sound.play()
-	main_h_box.visible = false
+	main_box.visible = false
 	host_v_box.visible = true
 
 func _on_join_panel_button_pressed():
 	button_sound.play()
-	main_h_box.visible = false
+	main_box.visible = false
 	join_v_box.visible = true
 
 func _on_host_button_pressed():
@@ -214,7 +220,7 @@ func game_start():
 	table.start()
 
 func ui_reset():
-	main_h_box.visible = true
+	main_box.visible = true
 	host_v_box.visible = false
 	join_v_box.visible = false
 	lobby_panel.visible = false
@@ -294,7 +300,7 @@ func to_lobby():
 func _on_local_play_panel_button_pressed():
 	button_sound.play()
 	network.sender_name = "local"
-	main_h_box.visible = false
+	main_box.visible = false
 	table.card_stack.show_ribbon = false
 	table.even.visible = true
 	table.odd.visible = true
@@ -329,3 +335,13 @@ func _on_help_button_pressed():
 func _on_help_document_close_button_pressed():
 	button_sound.play()
 	help_document.visible = false
+
+func _on_setting_panel_button_pressed():
+	button_sound.play()
+	main_box.visible = false
+	setting_panel.visible = true
+
+func _on_setting_close_button_pressed():
+	button_sound.play()
+	main_box.visible = true
+	setting_panel.visible = false

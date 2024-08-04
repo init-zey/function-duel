@@ -2,3 +2,4 @@
 
 [resource]
 bg_color = Color(0.101961, 0.101961, 0.101961, 0.784314)
+anti_aliasing = false

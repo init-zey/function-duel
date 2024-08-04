@@ -2,6 +2,24 @@
 extends Card
 class_name FunctionCard
 
+const name_texture_dict = {
+			FunctionName.X : preload("res://asset/sprite/function/x.png"),
+			FunctionName.REVERSE : preload("res://asset/sprite/function/reverse.png"),
+			FunctionName.EXP : preload("res://asset/sprite/function/exp.png"),
+			FunctionName.LOG : preload("res://asset/sprite/function/ln.png"),
+			FunctionName.SQR : preload("res://asset/sprite/function/sqr.png"),
+			FunctionName.SQRT : preload("res://asset/sprite/function/sqrt.png"),
+			FunctionName.ABS : preload("res://asset/sprite/function/abs.png"),
+			FunctionName.ADD : preload("res://asset/sprite/function/add.png"),
+			FunctionName.MUL : preload("res://asset/sprite/function/mul.png"),
+			FunctionName.MOD : preload("res://asset/sprite/function/mod.png"),
+			FunctionName.SIN : preload("res://asset/sprite/function/sin.png"),
+			FunctionName.COS : preload("res://asset/sprite/function/cos.png"),
+			FunctionName.TAN : preload("res://asset/sprite/function/tan.png"),
+			FunctionName.SIGN : preload("res://asset/sprite/function/sign.png"),
+			FunctionName.FLOOR : preload("res://asset/sprite/function/floor.png"),
+}
+
 enum FunctionName {
 	X,
 	REVERSE,
@@ -47,15 +65,7 @@ static func create(table, function_name, player):
 			FunctionName.SIGN : "sign(x)",
 			FunctionName.FLOOR : "floor(x)",
 		}.get(v)
-		update_face_pattern({
-			FunctionName.X : preload("res://asset/sprite/function/x.png"),
-			FunctionName.EXP : preload("res://asset/sprite/function/exp.png"),
-			FunctionName.REVERSE : preload("res://asset/sprite/function/reverse.png"),
-			FunctionName.SQR : preload("res://asset/sprite/function/sqr.png"),
-			FunctionName.SQRT : preload("res://asset/sprite/function/sqrt.png"),
-			FunctionName.MUL : preload("res://asset/sprite/function/mul.png"),
-			FunctionName.COS : preload("res://asset/sprite/function/cos.png"),
-		}.get(v))
+		update_face_pattern(name_texture_dict.get(v))
 
 func process(bottom):
 	var top = self

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://c5joj7nr7xqwa"]
+[gd_scene load_steps=20 format=3 uid="uid://c5joj7nr7xqwa"]
 
 [ext_resource type="Script" path="res://script/game.gd" id="1_likpo"]
 [ext_resource type="Script" path="res://script/ip_button.gd" id="2_6qx1a"]
@@ -13,9 +13,14 @@
 [ext_resource type="FontFile" uid="uid://cc0xg2kiorbqn" path="res://asset/font/lxgw-wenkai-v1.330/LXGWWenKai-Light.ttf" id="7_iynca"]
 [ext_resource type="FontFile" uid="uid://cf1nxlcsrtty8" path="res://asset/font/lxgw-wenkai-v1.330/LXGWWenKai-Regular.ttf" id="7_xb1kc"]
 [ext_resource type="FontFile" uid="uid://coyyulc3totm4" path="res://asset/font/lxgw-wenkai-v1.330/LXGWWenKai-Bold.ttf" id="8_btc7n"]
+[ext_resource type="Script" path="res://script/setting_panel.gd" id="8_ksq5w"]
 [ext_resource type="FontFile" uid="uid://cq6k2i6nkxus3" path="res://asset/font/lxgw-wenkai-v1.330/LXGWWenKaiMono-Regular.ttf" id="9_h2cyl"]
+[ext_resource type="Texture2D" uid="uid://3jvkr026hv6m" path="res://asset/user_interface/transparent_ui.png" id="9_vg8sx"]
 [ext_resource type="Texture2D" uid="uid://diurs03iyj4f2" path="res://asset/user_interface/close.png" id="13_hdima"]
 [ext_resource type="Script" path="res://script/help_document_label.gd" id="13_v4p66"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_0sywg"]
+font_color = Color(1, 1, 1, 0.588235)
 
 [node name="Game" type="Control"]
 layout_mode = 3
@@ -49,55 +54,75 @@ fit_content = true
 autowrap_mode = 0
 script = ExtResource("3_7r3jj")
 
-[node name="MainHBox" type="HBoxContainer" parent="."]
+[node name="MainBox" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -226.5
-offset_top = -161.0
-offset_right = 226.5
-offset_bottom = -65.0
+offset_left = -248.0
+offset_top = -200.0
+offset_right = 248.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="MarginContainer" type="MarginContainer" parent="MainHBox"]
+[node name="HBoxContainer" type="HBoxContainer" parent="MainBox"]
 layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainBox/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="HostPanelButton" type="Button" parent="MainHBox/MarginContainer"]
+[node name="HostPanelButton" type="Button" parent="MainBox/HBoxContainer/MarginContainer"]
 custom_minimum_size = Vector2(100, 80)
 layout_mode = 2
 text = "创建房间"
 
-[node name="MarginContainer2" type="MarginContainer" parent="MainHBox"]
+[node name="MarginContainer2" type="MarginContainer" parent="MainBox/HBoxContainer"]
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="JoinPanelButton" type="Button" parent="MainHBox/MarginContainer2"]
+[node name="JoinPanelButton" type="Button" parent="MainBox/HBoxContainer/MarginContainer2"]
 custom_minimum_size = Vector2(100, 80)
 layout_mode = 2
 text = "加入房间"
 
-[node name="MarginContainer3" type="MarginContainer" parent="MainHBox"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="MainBox"]
 layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainBox/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/margin_left = 8
 theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="LocalPlayPanelButton" type="Button" parent="MainHBox/MarginContainer3"]
+[node name="LocalPlayPanelButton" type="Button" parent="MainBox/HBoxContainer2/MarginContainer"]
 custom_minimum_size = Vector2(100, 80)
 layout_mode = 2
 text = "本地游玩"
+
+[node name="MarginContainer2" type="MarginContainer" parent="MainBox/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="SettingPanelButton" type="Button" parent="MainBox/HBoxContainer2/MarginContainer2"]
+custom_minimum_size = Vector2(100, 80)
+layout_mode = 2
+text = "设置"
 
 [node name="HostVBox" type="VBoxContainer" parent="."]
 visible = false
@@ -403,6 +428,209 @@ texture_focused = ExtResource("5_mpa2a")
 ignore_texture_size = true
 stretch_mode = 0
 
+[node name="SettingPanel" type="MarginContainer" parent="." node_paths=PackedStringArray("volume_slider", "ui_scale_slider", "stack_size_editor", "lang_selector")]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 120
+theme_override_constants/margin_top = 120
+theme_override_constants/margin_right = 120
+theme_override_constants/margin_bottom = 120
+script = ExtResource("8_ksq5w")
+volume_slider = NodePath("PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/音量/HBoxContainer/VolumeSlider")
+ui_scale_slider = NodePath("PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/界面缩放/HBoxContainer/UiScaleSlider")
+stack_size_editor = NodePath("PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/牌堆大小/HBoxContainer/StackSizeEditor")
+lang_selector = NodePath("PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/语言/HBoxContainer/LangSelector")
+
+[node name="PanelContainer" type="PanelContainer" parent="SettingPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingPanel/PanelContainer"]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="SettingPanel/PanelContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="ScrollContainer" type="ScrollContainer" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="音量" type="MarginContainer" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/音量"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/音量/HBoxContainer"]
+layout_mode = 2
+text = "音量："
+
+[node name="VolumeSlider" type="HSlider" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/音量/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+max_value = 1.0
+step = -1.0
+
+[node name="界面缩放" type="MarginContainer" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/界面缩放"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/界面缩放/HBoxContainer"]
+layout_mode = 2
+text = "界面缩放：
+"
+
+[node name="UiScaleSlider" type="HSlider" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/界面缩放/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_icons/grabber = ExtResource("9_vg8sx")
+theme_override_icons/grabber_highlight = ExtResource("9_vg8sx")
+theme_override_icons/grabber_disabled = ExtResource("9_vg8sx")
+theme_override_icons/tick = ExtResource("9_vg8sx")
+min_value = -3.0
+max_value = 1.0
+tick_count = 5
+ticks_on_borders = true
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/界面缩放/HBoxContainer/UiScaleSlider"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/界面缩放/HBoxContainer/UiScaleSlider/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0.125"
+label_settings = SubResource("LabelSettings_0sywg")
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/界面缩放/HBoxContainer/UiScaleSlider/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0.25"
+label_settings = SubResource("LabelSettings_0sywg")
+horizontal_alignment = 1
+
+[node name="Label3" type="Label" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/界面缩放/HBoxContainer/UiScaleSlider/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "0.5"
+label_settings = SubResource("LabelSettings_0sywg")
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/界面缩放/HBoxContainer/UiScaleSlider/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "1"
+label_settings = SubResource("LabelSettings_0sywg")
+horizontal_alignment = 1
+
+[node name="Label5" type="Label" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/界面缩放/HBoxContainer/UiScaleSlider/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "2"
+label_settings = SubResource("LabelSettings_0sywg")
+horizontal_alignment = 1
+
+[node name="牌堆大小" type="MarginContainer" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/牌堆大小"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/牌堆大小/HBoxContainer"]
+layout_mode = 2
+text = "牌堆大小："
+
+[node name="StackSizeEditor" type="LineEdit" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/牌堆大小/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/caret_width = 1
+placeholder_text = "3（组）"
+virtual_keyboard_type = 2
+select_all_on_focus = true
+
+[node name="语言" type="MarginContainer" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/语言"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="Label" type="Label" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/语言/HBoxContainer"]
+layout_mode = 2
+text = "语言：
+"
+
+[node name="LangSelector" type="OptionButton" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/语言/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+item_count = 2
+popup/item_0/text = "CN"
+popup/item_0/id = 0
+popup/item_1/text = "EN"
+popup/item_1/id = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="SettingPanel/PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 8
+
+[node name="SettingCloseButton" type="Button" parent="SettingPanel/PanelContainer/VBoxContainer/MarginContainer2"]
+custom_minimum_size = Vector2(100, 50)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "关闭"
+
 [node name="HelpDocument" type="ColorRect" parent="."]
 visible = false
 layout_mode = 1
@@ -552,11 +780,11 @@ autoplay = true
 
 [node name="WaterSound" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("7_fg0d8")
-volume_db = -15.0
 
-[connection signal="pressed" from="MainHBox/MarginContainer/HostPanelButton" to="." method="_on_host_panel_button_pressed"]
-[connection signal="pressed" from="MainHBox/MarginContainer2/JoinPanelButton" to="." method="_on_join_panel_button_pressed"]
-[connection signal="pressed" from="MainHBox/MarginContainer3/LocalPlayPanelButton" to="." method="_on_local_play_panel_button_pressed"]
+[connection signal="pressed" from="MainBox/HBoxContainer/MarginContainer/HostPanelButton" to="." method="_on_host_panel_button_pressed"]
+[connection signal="pressed" from="MainBox/HBoxContainer/MarginContainer2/JoinPanelButton" to="." method="_on_join_panel_button_pressed"]
+[connection signal="pressed" from="MainBox/HBoxContainer2/MarginContainer/LocalPlayPanelButton" to="." method="_on_local_play_panel_button_pressed"]
+[connection signal="pressed" from="MainBox/HBoxContainer2/MarginContainer2/SettingPanelButton" to="." method="_on_setting_panel_button_pressed"]
 [connection signal="pressed" from="HostVBox/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="HostVBox/HostBackButton" to="." method="_on_host_back_button_pressed"]
 [connection signal="pressed" from="JoinVBox/JoinButton" to="." method="_on_join_button_pressed"]
@@ -570,5 +798,10 @@ volume_db = -15.0
 [connection signal="pressed" from="CornerButtonsContainer/MarginContainer3/HelpButton" to="." method="_on_help_button_pressed"]
 [connection signal="pressed" from="CornerButtonsContainer/MarginContainer/ConsoleButton" to="." method="_on_console_button_pressed"]
 [connection signal="pressed" from="CornerButtonsContainer/MarginContainer2/ExitButton" to="." method="_on_exit_button_pressed"]
+[connection signal="drag_ended" from="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/音量/HBoxContainer/VolumeSlider" to="SettingPanel" method="_on_volume_setter_drag_ended"]
+[connection signal="drag_started" from="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/界面缩放/HBoxContainer/UiScaleSlider" to="SettingPanel" method="_on_ui_scale_setter_drag_started"]
+[connection signal="text_changed" from="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/牌堆大小/HBoxContainer/StackSizeEditor" to="SettingPanel" method="_on_stack_size_editor_text_changed"]
+[connection signal="item_selected" from="SettingPanel/PanelContainer/VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/语言/HBoxContainer/LangSelector" to="SettingPanel" method="_on_lang_selector_item_selected"]
+[connection signal="pressed" from="SettingPanel/PanelContainer/VBoxContainer/MarginContainer2/SettingCloseButton" to="." method="_on_setting_close_button_pressed"]
 [connection signal="meta_clicked" from="HelpDocument/ScrollContainer/MarginContainer/RichTextLabel" to="HelpDocument/ScrollContainer/MarginContainer/RichTextLabel" method="_on_meta_clicked"]
 [connection signal="pressed" from="HelpDocument/MarginContainer/HelpDocumentCloseButton" to="." method="_on_help_document_close_button_pressed"]
