@@ -160,7 +160,7 @@ func _on_join_button_pressed():
 	var bottom_label = $JoinVBox/BottomLabel
 	bottom_label.modulate = Color.WHITE
 	bottom_label.text = "JOINING..."
-	bottom_label.visible = true
+	table.information_visible = true
 
 func _on_send_button_pressed():
 	send_local_message()
@@ -230,7 +230,7 @@ func ui_reset():
 	table.card_stack.ribbon_label.text = "[center][wave amp=50.0 freq=5.0 connected=1][font size=100]FUNCTION [font size=150](DUEL)"
 	table.card_stack.ribbon_color = Color.WHITE
 	table.card_stack.show_ribbon = true
-	table.card_stack.bottom_label.visible = false
+	table.information_visible = false
 	table.even.visible = false
 	table.odd.visible = false
 	restart_button.visible = false

@@ -4,6 +4,7 @@ class_name Player
 
 @export var table : Table
 @export var player_label : Label
+@export var score_label : Label
 @export var player_name : String
 @export var rect : Rect2
 @export var opposite_player : Player
@@ -17,7 +18,7 @@ class_name Player
 	set(v):
 		custom_player_name = v
 		if player_label:
-			update_text()
+			update_player_label()
 @export var v_to_bottom : bool = false
 @export var vertical : bool = false:
 	set(v):
@@ -48,13 +49,18 @@ class_name Player
 @export var current : bool = false:
 	set(v):
 		current = v
-		update_text()
-
+		update_player_label()
+var score : float = 0:
+	set(v):
+		score = v
+		score_label.text = "分数：" + str(score)
+var maximum_card : Card
 func _ready():
 	add_theme_font_size_override("font_size", 64)
 	add_theme_font_override("font", preload("res://asset/font/ThaleahFat.ttf"))
 	custom_player_name = player_name
 	self.vertical = table.vertical
+	table.cards_updated.connect(self.on_cards_updated)
 
 @rpc('call_local', 'any_peer')
 func confirm():
@@ -98,6 +104,26 @@ func receive_place(real_card_size):
 	elif player_name == "odd":
 		return table.size/2 + Vector2(real_card_size.x, 0)
 
-func update_text():
+func update_player_label():
 	player_label.text = ("-{0}-" if current else "{0}").format([custom_player_name])
+
+func on_cards_updated():
+	score = max_value() - number_of_cards()
 	
+func max_value():
+	var maximum_value : float = -INF
+	var max_card : Card
+	for card in table.cards:
+		if card is ValueCard and card.player == self and is_equal_approx(card.value.imag, 0):
+			if card.value.real > maximum_value:
+				maximum_value = card.value.real
+				max_card = card
+	self.maximum_card = max_card
+	return maximum_value
+
+func number_of_cards():
+	var r = 0
+	for card in table.cards:
+		if card.player == self:
+			r += 1
+	return r

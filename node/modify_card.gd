@@ -1,10 +1,24 @@
 extends Card
 class_name ModifyCard
 
-static func create(table, card_name, player):
+enum ModifyName{
+	DERIVATIVE,
+}
+
+var modify_name : ModifyName:
+	set(v):
+		modify_name = v
+		card_name = {
+			ModifyName.DERIVATIVE : "d/dx"
+		}[v]
+		update_face_pattern({
+			ModifyName.DERIVATIVE : preload("res://asset/sprite/derivative.png")
+		}[v])
+
+static func create(table, modify_name, player):
 	var new_card = ModifyCard.new()
 	new_card.table = table
-	new_card.card_name = card_name
+	new_card.modify_name = modify_name
 	new_card.player = player
 	return new_card
 

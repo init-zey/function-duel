@@ -218,6 +218,7 @@ fit_content = true
 
 [node name="Control" type="Control" parent="CardStack"]
 layout_mode = 1
+anchors_preset = 0
 offset_bottom = 120.0
 
 [node name="Label" type="Label" parent="CardStack/Control"]
@@ -236,7 +237,7 @@ text = "123"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Even" type="Control" parent="." node_paths=PackedStringArray("table", "player_label", "opposite_player")]
+[node name="Even" type="Control" parent="." node_paths=PackedStringArray("table", "player_label", "score_label", "opposite_player")]
 layout_mode = 1
 anchor_right = 0.5
 anchor_bottom = 1.0
@@ -245,6 +246,7 @@ mouse_filter = 2
 script = ExtResource("4_5625h")
 table = NodePath("..")
 player_label = NodePath("MarginContainer/Label")
+score_label = NodePath("MarginContainer/Label/ScoreLabel")
 player_name = "even"
 rect = Rect2(0, 0, 0.5, 1)
 opposite_player = NodePath("../Odd")
@@ -281,7 +283,15 @@ label_settings = SubResource("LabelSettings_kqat5")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Odd" type="Control" parent="." node_paths=PackedStringArray("table", "player_label", "opposite_player")]
+[node name="ScoreLabel" type="Label" parent="Even/MarginContainer/Label"]
+layout_mode = 2
+offset_top = 88.0
+offset_right = 300.0
+offset_bottom = 121.0
+text = "分数：0"
+horizontal_alignment = 1
+
+[node name="Odd" type="Control" parent="." node_paths=PackedStringArray("table", "player_label", "score_label", "opposite_player")]
 layout_mode = 1
 anchor_left = 0.5
 anchor_right = 1.0
@@ -291,6 +301,7 @@ mouse_filter = 2
 script = ExtResource("4_5625h")
 table = NodePath("..")
 player_label = NodePath("MarginContainer2/Label")
+score_label = NodePath("MarginContainer2/Label/ScoreLabel")
 player_name = "odd"
 rect = Rect2(0.5, 0, 0.5, 1)
 opposite_player = NodePath("../Even")
@@ -328,6 +339,14 @@ text = "odd"
 label_settings = SubResource("LabelSettings_kqat5")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="Odd/MarginContainer2/Label"]
+layout_mode = 2
+offset_top = 88.0
+offset_right = 300.0
+offset_bottom = 121.0
+text = "分数：0"
+horizontal_alignment = 1
 
 [node name="CardCanvasGroup" type="CanvasGroup" parent="."]
 material = SubResource("ShaderMaterial_vv3cy")

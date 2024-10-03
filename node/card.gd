@@ -357,6 +357,7 @@ func on_disconfirm():
 
 func on_enter_table():
 	set_shader_parameter("face_bg_col", self.player.card_color)
+	table.cards_updated.emit()
 	if self is ValueCard:
 		table.on_value_card_entered()
 
@@ -387,4 +388,3 @@ func set_shader_parameter(pname, value):
 	material.set_shader_parameter(pname, value)
 	if mask and pname in ["resolution", "card_size", "round_rate", "angle", "revolve", "dissolve_value", "burn_size"]:
 		mask.material.set_shader_parameter(pname, value)
-

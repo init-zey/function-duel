@@ -402,4 +402,3 @@ class And:
 			if not filter.was_met(node):
 				return false
 		return true
-

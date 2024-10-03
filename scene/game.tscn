@@ -614,7 +614,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 item_count = 2
 popup/item_0/text = "CN"
-popup/item_0/id = 0
 popup/item_1/text = "EN"
 popup/item_1/id = 1
 
@@ -663,12 +662,11 @@ theme_override_constants/margin_bottom = 48
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_fonts/normal_font = ExtResource("7_iynca")
-theme_override_fonts/bold_font = ExtResource("8_btc7n")
-theme_override_fonts/italics_font = ExtResource("7_xb1kc")
 theme_override_fonts/mono_font = ExtResource("9_h2cyl")
+theme_override_fonts/italics_font = ExtResource("7_xb1kc")
+theme_override_fonts/bold_font = ExtResource("8_btc7n")
 bbcode_enabled = true
 text = "[font size=20]欢迎来到[b][font_size=20]决斗(函数)[/font_size][/b] ，这是一个以数学函数关系为题材的非集换式双人卡牌游戏。
-
 免责声明：本游戏尚处于开发阶段，甚至连名字都没想好，请高抬贵手留下您的优化意见。
 
 [url=https://space.bilibili.com/3546704672459594/]B站UID：3546704672459594（点击复制链接）[/url]
@@ -676,27 +674,46 @@ text = "[font size=20]欢迎来到[b][font_size=20]决斗(函数)[/font_size][/b
 
 [font size=30] § 1.为什么叫决斗(函数)？[/font]
 [indent]
-因为本游戏是两个玩家互相打牌，卡牌是各种函数和数值，游戏的终极目标就是利用函数让自己的数值高于对方。当然除了函数和数值之外我们还有其它小玩具——其实也是函数的衍生品。整个游戏归根结底是围绕函数展开的。
-[/indent]
 
+因为本游戏是两个玩家互相打牌，卡牌是各种函数和数值，游戏的终极目标是利用函数让自己的分数高于对方。当然除了函数和数值之外我们还有其它小玩具——其实也是函数的衍生品。整个游戏归根结底是围绕函数展开的。
+[/indent]
 
 [font size=30] § 2.启动！[/font]
 [indent]
+
 本游戏支持局域网联机，你可以在同一wifi下或使用内网穿透与朋友联机，也可以面对面启用本地游玩。
 
+或者，如果你足够无聊的话，可以自己和自己打牌。
+
 安卓和windows都有支持！甚至可以互相联机。
+
+通常而言，大部分设备都是支持的。
+[/indent]
+
+[font size=30] § 3.救命，我该怎么玩？[/font]
+[indent]
 
 进入对局后，你会看到一个牌堆和两个玩家手牌区域。
 
 游戏默认会进行[color=orange]初始发牌[/color]，完毕后每位玩家获得6张手牌，包括3x函数、2x数值和1x修饰，此时牌堆还剩下18张牌。此后每回合，牌堆都会向所有人补充一张手牌，类别每三张一循环，顺序为修饰、数值、函数。这些分类的具体含义请参见下文。
 
+记住，胜利目标只有一个：让自己的分数高于对方。
+
+[b][font_size=20]分数是如何计算的？[/font_size][/b]  这里有一个公式：
+[indent]
+
+[color=orange] 分数 = 玩家最大的一张数值牌 - 玩家拥有的总牌数 [/color]
+[/indent]
+
+因此，玩家的两个任务是：增加手上最大的数值，减少手中拥有的牌数。
+
+你可以在场上看到一张边框发红的牌，它标记了[color=orange]当前分数更高者的最大数值牌[/color]。
+
 你可以拖拽自己的手牌到任意位置，但不能逾越区域边界。[color=orange]松开[/color]就可以[color=orange]与下方卡牌组合[/color]，不管对手还是自己都可以，只要[color=orange]有配方就行[/color]。每回合可以组合任意数量的牌，确定无误后（真的确定无误才行，因为自己确定后对手还有行动机会）在己方手牌区域[color=orange]下滑确认[/color]准备。这个时候你的区域会变蓝，卡牌会下沉一点点，并且你不能继续操作自己的手牌了。
 
 如果对方把牌叠到某张你很不想让ta叠的牌上，不要慌张，只要再把自己的一张有配方的牌怼上去，[color=orange]友方保护机制[/color]会取代对方的牌，并且直到回合结束时对方都不再能反攻。——不过[color=orange]代价[/color]就是你这两张叠在一起的牌也不能分开了。
 
-当双方都确认准备后，回合立即结束，叠在一起的牌[color=orange]合成[/color]为新的牌。
-
-系统会将[color=orange]最大的数值[/color]牌用[color=orange]红色边框标出[/color]。当牌堆清空后，游戏自动结束，[color=orange]最高数值牌最大者胜出[/color]。
+当双方都确认准备后，回合立即结束，叠在一起的牌[color=orange]合成[/color]为[color=orange]配方[/color]中的结果。
 [/indent]
 
 

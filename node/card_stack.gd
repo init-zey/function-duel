@@ -42,7 +42,7 @@ var deck : Dictionary = {
 		Complex.new(0, 1) : 10,
 	},
 	"modify" : {
-		"d/dx" : 50,
+		ModifyCard.ModifyName.DERIVATIVE : 50,
 	}
 }
 var names = {
@@ -144,7 +144,7 @@ func start():
 		complete_start.rpc()
 	else:
 		complete_start()
-	bottom_label.visible = true
+	table.information_visible = true
 
 @rpc('call_local')
 func deal(cpos=null):

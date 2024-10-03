@@ -19,6 +19,7 @@ static func create(table, value, player):
 	new_card.table = table
 	new_card.value = value
 	new_card.player = player
+	new_card.update_face_pattern(preload("res://asset/sprite/value.png"))
 	return new_card
 
 func process(bottom):

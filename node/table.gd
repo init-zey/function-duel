@@ -2,6 +2,7 @@ extends ColorRect
 class_name Table
 
 signal game_end(winner)
+signal cards_updated()
 
 @export var resolution : Vector2:
 	set(v):
@@ -69,6 +70,13 @@ var current_player : Player = null:
 
 @export var card_canvas_group : CanvasGroup
 @export var stone_group : CanvasGroup
+
+var information_visible : bool = false:
+	set(v):
+		information_visible = v
+		card_stack.bottom_label.visible = v
+		even.score_label.visible = v
+		odd.score_label.visible = v
 
 func _ready():
 	self.resized.connect(on_resized)
@@ -174,17 +182,14 @@ func on_value_card_entered():
 		highlight_value_card = winner_card
 			
 func find_winner_card():
-	var winner_card = null
-	var winner_value = -INF
-	for card in cards:
-		if card.player != null and card is ValueCard:
-			if is_equal_approx(card.value.imag, 0) and card.value.real >= winner_value:
-				if is_equal_approx(card.value.real, winner_value):
-					if int(winner_value)%2 != (0 if winner_card.player.player_name == "even" else 1):
-						continue
-				winner_value = card.value.real
-				winner_card = card
-	return winner_card
+	var r
+	if even.score > odd.score:
+		r = even.maximum_card
+	elif even.score < odd.score:
+		r = odd.maximum_card
+	else:
+		r = even.maximum_card if int(even.score)%2==0 else odd.maximum_card
+	return r
 
 func dissolve_rest():
 	for card in cards:

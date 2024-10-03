@@ -61,7 +61,7 @@ float perlin(vec2 input){
 	vec2 i = floor(input);
 	vec2 j = fract(input);
 	vec2 coord = smoothstep(0.,1.,j);
-	
+
 	float a = rand(i);
 	float b = rand(i+vec2(1.0,0.0));
 	float c = rand(i+vec2(0.0,1.0));

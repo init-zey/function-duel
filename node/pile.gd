@@ -95,6 +95,7 @@ func to_process():
 		card.center_position = self.position + Vector2(ref_index * card.real_card_size.x, 0)
 		card.revolve = PI/2
 		card.tween_revolve = 0
+		card.on_enter_table()
 		get_tree().create_timer(0.2).timeout.connect(card.on_enter_table)
 		await get_tree().create_timer(0.1).timeout
 	queue_free()
